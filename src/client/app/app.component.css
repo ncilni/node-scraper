@@ -1,0 +1,20 @@
+/* Starter styles */
+.test-image {
+    content: url('../assets/images/test-image.png');
+    max-width: 100px;
+}
+.info-block {
+    display: inline-block;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.default-info{
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
