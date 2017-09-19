@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 });
 connection.connect(function(err){
 if(!err) {
-    console.log("Database is connected ... nn");
+    // console.log("Database is connected ... nn");
 } else {
     console.log("Error connecting database ... nn");
 }
@@ -30,18 +30,26 @@ if(!err) {
 //   });
 //   return searchID;
 // }
-function SetsearchId(){
-  var newsearchId;
-  connection.query('SELECT searchId FROM search_history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
-    if(error) {
-      console.log("error occurred in retrieving SearchId from search history",error);
-      }else{
-        console.log('Last searchId=',result[0].searchId);
-        newsearchId=result[0].searchId + 1;
-      }
-    });
-    return newsearchId;
-  }
+// function Sendresponse(results){
+//   res.send({
+//     "code":200,
+//     "success":"Records from db",
+//     "result":results,
+//     "url": url
+//       })
+// }
+// function SetsearchId(){
+//   var newsearchId;
+//   connection.query('SELECT searchId FROM search_history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
+//     if(error) {
+//       console.log("error occurred in retrieving SearchId from search history",error);
+//       }else{
+//         console.log('Last searchId=',result[0].searchId);
+//         newsearchId=result[0].searchId + 1;
+//       }
+//     });
+//     return newsearchId;
+//   }
 function GetpageNumbers(indus, loc){
   var resulturl='https://www.yelp.com/search?find_desc='+indus+'&find_loc='+loc+'&start=0';
   var pages;
@@ -144,14 +152,14 @@ exports.searchyp = function(req,res){
   var searchId;
   var industry = req.query.industry.replace(/ /g,'+');
   var location = req.query.location.replace(/ /g,'+');
-  connection.query("SELECT SearchId FROM search_history where location= '"+location+"' and industry='"+industry+"' and search_directory='Yellow Pages'",function (error, result, fields){
+  connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"' and search_directory='Yellow Pages'",function (error, result, fields){
     if(error) {
       res.send({
         "code":500,
         "Failure":"Internal Server Error"
           });
         }else{
-          console.log(result);
+          console.log('results',result);
           if(result.length==0){            
               connection.query('SELECT searchId FROM search_history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
               if(error) {
@@ -203,7 +211,7 @@ exports.searchyp = function(req,res){
           
               }
               else {
-                console.log('Success');
+                console.log('Successfully entered into the DB');
               }
               });
               res.send({
@@ -215,22 +223,29 @@ exports.searchyp = function(req,res){
               });
             }else{
               console.log('result',result);
-              var recordId=result[0].SearchId;
-              console.log('newsearchId=',newsearchId);
-              connection.query("SELECT * FROM Results WHERE SearchId= '"+recordId+"'",function(error, newresults, fields){
+              // var recordId=result[0].searchId;
+              // // console.log('newsearchId=',newsearchId);
+              var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
+              console.log(query);
+              connection.query(query,function(error, newresults, fields){
                 if(error) {
                   res.send({
                     "code":500,
                     "Failure":"Internal Server Error"
                       });
                   }else{
-                    // console.log(results[0]);
                     res.send({
                       "code":200,
                       "success":"Records from db",
                       "result":newresults,
                       "url": url
                         });
+                    // setTimeout(function(){ res.send({
+                    //   "code":200,
+                    //   "success":"Records from db",
+                    //   "result":newresults,
+                    //   "url": url
+                    //     }); }, 500);
                   }
                 });
               
