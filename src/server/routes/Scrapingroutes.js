@@ -5,11 +5,6 @@ var path = require('path');
 var mysql = require('mysql');
 var Xray = require('x-ray');
 var x = Xray();
-// var firebase = require('firebase');
-// firebase.initializeApp({
-// serviceAccount: './Jumpcrew-68ceb75cc058.json',
-// databaseURL: 'https://jumpcrew-1503319679326.firebaseio.com/'
-// });
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -158,7 +153,7 @@ exports.searchyp = function(req,res){
         }else{
           console.log(result);
           if(result.length==0){            
-              connection.query('SELECT searchId FROM history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
+              connection.query('SELECT searchId FROM search_history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
               if(error) {
                 console.log("error occurred",error);
                 }else{
@@ -170,12 +165,12 @@ exports.searchyp = function(req,res){
             var today = new Date();
             var url='https://www.yellowpages.com/search?search_terms='+industry+'&geo_location_terms='+location;
             var search={
-              "location":req.body.location,
-              "industry":req.body.industry,
-              "date":today,
-              "SearchDir":'Yellow Pages'
+              "location":req.query.location,
+              "industry":req.query.industry,
+              "search_directory":'Yellow Pages',
+              "date":today              
             };
-            connection.query('INSERT INTO history SET ?',search, function (error, scrapes, fields) {
+            connection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
             if(error) {
               console.log("error ocurred",error);
               res.send({
@@ -202,7 +197,7 @@ exports.searchyp = function(req,res){
             }
             // console.log('values', values);
             console.log('json', jsonvalues);
-            connection.query('INSERT INTO Results (Name, address, phone, website,SearchId) VALUES ?', [values], function(err,result) {
+            connection.query('INSERT INTO search_results (business_name, address, phone, website,SearchId) VALUES ?', [values], function(err,result) {
               if(err) {
                 console.log('DB Error');
           

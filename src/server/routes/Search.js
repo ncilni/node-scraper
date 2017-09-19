@@ -2,9 +2,6 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var path = require('path');
-var mysql = require('mysql');
-var Xray = require('x-ray');
-var x = Xray();
 var search = require('./Scrapingroutes');
 
 app.use(express.static('/'));
