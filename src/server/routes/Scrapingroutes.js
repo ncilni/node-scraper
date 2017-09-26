@@ -222,7 +222,7 @@ exports.searchyp = function(req,res){
             phone: 'div.phone.primary',
             website:'a@href'
             }])(function(err, results){
-              console.log('scraped results',results);
+              // console.log('scraped results',results);
             for(var i=0; i< results.length; i++){
             // values.push([results[i].Name,results[i].address, results[i].phone]);
             // var add= results[i].address.replace(/\n        |\n    /g,'');
@@ -232,7 +232,7 @@ exports.searchyp = function(req,res){
             jsonvalues.push({"Name":results[i].Name,"address":add,"phone":results[i].phone,"website":results[i].website, "search ID":searchId});
             }
             // console.log('values', values);
-            console.log('json', jsonvalues);
+            // console.log('json', jsonvalues);
             connection.query('INSERT INTO search_results (business_name, address, phone, website,SearchId) VALUES ?', [values], function(err,result) {
               if(err) {
                 console.log('DB Error');
@@ -250,11 +250,11 @@ exports.searchyp = function(req,res){
                 });
               });
             }else{
-              console.log('result',result);
+              // console.log('result',result);
               // var recordId=result[0].searchId;
               // // console.log('newsearchId=',newsearchId);
               var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
-              console.log(query);
+              // console.log(query);
               connection.query(query,function(error, newresults, fields){
                 if(error) {
                   res.send({

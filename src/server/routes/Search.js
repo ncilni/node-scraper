@@ -9,7 +9,7 @@ app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
 router.get('/', function (req, res) {
-  console.log(req.query);
+  // console.log(req.query);
   var directory= req.query.directory;
   switch(directory){
     case "yelp": 
