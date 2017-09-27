@@ -23,8 +23,17 @@ export class SearchFormComponent implements OnInit {
     {id: 1, name: "Hotels"},
     {id: 2, name: "Real Estate"},
     {id: 3, name: "eCommerce"},
-    {id: 4, name: "Brazil"},
-    {id: 5, name: "England"}
+    {id: 4, name: "Beauty Products"},
+    {id: 5, name: "Clothing"},
+    {id: 6, name: "Niche Food Services"},
+    {id: 7, name: "Coffee Shops"},
+    {id: 8, name: "Wedding Cakes"},
+    {id: 9, name: "Dentist"},
+    {id: 10, name: "Car Dealerships"},
+    {id: 11, name: "Lawyers"},
+    {id: 12, name: "Jewellery Stores"},
+    {id: 13, name: "HVAC"},
+    {id: 14, name: "Landscaping"}
   ];
   directories = [
     {id: 1, name: "Yelp"},

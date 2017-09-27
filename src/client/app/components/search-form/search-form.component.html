@@ -29,7 +29,7 @@
             <div class="input-group">
               <input placeholder="Search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" [formControl]="searchControl" #searchtxt >
               <span class="input-group-btn">
-                <button class="btn btn-secondary" type="button">Go!</button>
+                <button class="btn btn-secondary" type="button" (click)="myFunc()">Go!</button>
               </span>
           </div>
         </div>
