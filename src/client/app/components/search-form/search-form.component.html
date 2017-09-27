@@ -6,37 +6,32 @@
     <hr class="divider">
     <form>
       <div class="row">
-        <div class="form-group col-lg-5">
-          <label class="text-heading">Location</label>
-          <input type="text" class="form-control">
-        </div>
-        <div class="form-group col-lg-4">
+        <div class="form-group col-lg-6">
           <label class="text-heading">Industry</label>
-          <select class="form-control">
-              <option selected>Select an Industry</option>
-              <option value="hotels">Hotels</option>
-              <option value="realEstate">Real Estate</option>
-              <option value="eCommerce">eCommerce</option>
-            </select>
-          <!-- <input type="email" class="form-control"> -->
+          <select class="form-control" name="industry" [(ngModel)]="isSelectedIndustry">
+            <option *ngFor="let industry of industries" [ngValue]="industry.name">{{industry.name}}</option>
+            <div *ngFor="let industry of industries" >
+              <h1> {{industry.id}}</h1>
+              <h2>{{industry.name}</h2>}
+            </div>
+          </select>
         </div>
-        <div class="form-group col-lg-3">
+        <div class="form-group col-lg-6">
           <label class="text-heading">Directory</label>
-          <select class="form-control">
-              <option selected>Select a Directory</option>
-              <option value="yelp">Yelp</option>
-              <option value="yp">Yellow Pages</option>
-              <option value="manta">Manta</option>
-            </select>
-          <!-- <input type="tel" class="form-control"> -->
+          <select class="form-control" name="directories" [(ngModel)]="isSelectedDirectory">
+            <option *ngFor="let directory of directories" [ngValue]="directory.name">{{directory.name}}</option>
+          </select>         
         </div>
-        <div class="clearfix"></div>
-        <div class="form-group col-lg-12">
-          <label class="text-heading">Message</label>
-          <textarea class="form-control" rows="6"></textarea>
-        </div>
-        <div class="form-group col-lg-12">
-          <button type="submit" class="btn btn-secondary">Submit</button>
+        <div class="col-lg-12">
+            <label class="text-heading">Location</label>
+          </div>
+          <div class="col-lg-12">
+            <div class="input-group">
+              <input placeholder="Search for location" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" class="form-control" [formControl]="searchControl" #searchtxt >
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="button">Go!</button>
+              </span>
+          </div>
         </div>
       </div>
     </form>
