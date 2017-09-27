@@ -1,9 +1,10 @@
 import { Component, OnInit, NgZone, ViewChild, ElementRef,EventEmitter  } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MapsAPILoader } from '@agm/core';
+import { Router } from '@angular/router';
 import { } from 'googlemaps';
 import { CommonServiceService } from '../../common-service.service';
-
+import { SearchService } from '../../core/search.service';
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
@@ -11,14 +12,15 @@ import { CommonServiceService } from '../../common-service.service';
 })
 export class SearchFormComponent implements OnInit {
    // declarations 
-   public rowData: EventEmitter<any> = new EventEmitter();
-   public latitude: number;
-   public longitude: number;
+  //  public rowData: EventEmitter<any> = new EventEmitter();
+  //  public latitude: number;
+  //  public longitude: number;
    public searchControl: FormControl;
    @ViewChild("searchtxt")
    public searchElementRef: ElementRef;
    isSelectedDirectory = 'Site Search';
    isSelectedIndustry = 'Industry';
+   isSelectedLocation = '';
    industries = [
     {id: 1, name: "Hotels"},
     {id: 2, name: "Real Estate"},
@@ -36,18 +38,18 @@ export class SearchFormComponent implements OnInit {
     {id: 14, name: "Landscaping"}
   ];
   directories = [
-    {id: 1, name: "Yelp"},
-    {id: 2, name: "Yellow Pages"},
-    {id: 3, name: "Manta"}
+    {id: 1, name: "Yelp", value:'yelp'},
+    {id: 2, name: "Yellow Pages", value:'yp'},
+    {id: 3, name: "Manta", value:'manta'}
   ];
      // end of declarations
 
      constructor(private mapsAPILoader: MapsAPILoader,
-      private ngZone: NgZone,public cms:CommonServiceService) { }
+      private ngZone: NgZone,public ss:SearchService, public router:Router) { }
 
   ngOnInit() {
     this.searchControl = new FormControl();
-     this.setCurrentPosition();
+    //  this.setCurrentPosition();
      this.mapsAPILoader.load().then(() => {
        let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
          types: ['(cities)'], componentRestrictions: {country: "us"},
@@ -65,39 +67,20 @@ export class SearchFormComponent implements OnInit {
            }
  
            //set latitude, longitude
-           this.latitude = place.geometry.location.lat();
-           this.longitude = place.geometry.location.lng();
+          //  this.latitude = place.geometry.location.lat();
+          //  this.longitude = place.geometry.location.lng();
            
          });
        });
      });
    }
-   myFunc(){
-     console.log(this.isSelectedDirectory);
-     console.log(this.isSelectedIndustry);
-   }
-   changeIndustry(name){
-     this.isSelectedIndustry = name;
-     console.log(this.isSelectedIndustry);
-   }
-   changeSearchEngine(name){
-    //  this.isSelected = name;
-   }
-   searchList(query){
-     var req = { "location": query,"industry": this.isSelectedIndustry};
-     console.log(req);
-     this.cms.ypSearch(req).subscribe(res =>{
-     this.rowData.next(res.json().result);
-     })
-   }
+  
  
-    private setCurrentPosition() {
-     if ("geolocation" in navigator) {
-       navigator.geolocation.getCurrentPosition((position) => {
-         this.latitude = position.coords.latitude;
-         this.longitude = position.coords.longitude;
-         
-       });
-     }
+   searchList(query){
+     var req = { "location": query,"industry": this.isSelectedIndustry, "directory": this.isSelectedDirectory};
+     var re = /,/gi; 
+     var loc = query.replace(re, ""); 
+     console.log(req);
+     this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory } });
    }
   }

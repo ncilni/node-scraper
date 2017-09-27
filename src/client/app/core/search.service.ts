@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class SearchService {
@@ -9,11 +10,14 @@ export class SearchService {
       private http: Http
   ) { }
 
-  testRequest() {
-    return this.http.get(`/api`)
-      // .map((res: Response) => res.json());
-      .toPromise()
-      .catch(this.handleError);
+  // SearchRequest(query):Observable<any> {
+  //   return this.http.get('/api/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory)
+  //     // .map((res: Response) => res.json());
+  //     .toPromise()
+  //     .catch(this.handleError);
+  // }
+  Search(query):Observable<any>{
+    return this.http.get('/api/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory)
   }
 
   private handleError(error: any): Promise<any> {

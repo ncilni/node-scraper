@@ -9,7 +9,7 @@
  */
 
  body {
-    font-family: "Times", Helvetica, Arial, sans-serif;
+    font-family: "Times", Helvetica, Arial, sans-serif !important;
     background-color: #36537b;    
   }
   
@@ -25,6 +25,11 @@
     font-size: 5rem;
     font-weight: 700;
     line-height: 1;
+  }
+  .tms {
+    font-family: 'Times New Roman', 'Times', 'serif';
+    font-size: 20px;
+    height: 40px;
   }
   
   .tagline-lower {

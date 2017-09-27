@@ -3659,6 +3659,7 @@ tbody.collapse.show {
 
 .card {
   position: relative;
+  margin-top: 2rem;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
