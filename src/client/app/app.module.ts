@@ -13,7 +13,8 @@ import { CoreModule } from './core/core.module';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { ExporterComponent } from './components/exporter/exporter.component';
 import { CommonServiceService } from "./common-service.service";
-
+import { DataTableComponent } from './components/data-table/data-table.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [
@@ -22,10 +23,11 @@ import { CommonServiceService } from "./common-service.service";
     SearchHistoryComponent,
     SearchFormComponent,
     PageNotFoundComponent,
-    ExporterComponent
+    ExporterComponent,
+    DataTableComponent
   ],
   imports: [
-    AppRoutingModule, AgmCoreModule.forRoot({
+    AppRoutingModule, NgxDatatableModule, AgmCoreModule.forRoot({
       apiKey: "AIzaSyBKJ4uoOaIJc53W4jBxUBZGBJQrCLk_hyo",
       libraries: ["places"],region:'US'     
     }),

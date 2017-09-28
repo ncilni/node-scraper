@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef,EventEmitter  } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Response } from '@angular/http';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 // import { Router, ActivatedRoute, Params, ParamMap  } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
@@ -20,7 +21,8 @@ export class SearchResultComponent implements OnInit {
     Directory = '';
     Industry = '';
     Location = '';
-    data=[];
+    data:any;
+    resp:any;
     query={};
    industries = [
     {id: 1, name: "Hotels"},
@@ -60,12 +62,19 @@ export class SearchResultComponent implements OnInit {
       this.Directory = this.route.snapshot.queryParams["directory"];
       console.log(this.Industry, this.Location, this.Directory);
       this.query={industry:this.Industry, location: this.Location, directory: this.Directory};
-      this.ss.Search(this.query).subscribe(data => {
-        // Read the result field from the JSON response.
-        this.data = data['result'];
-        console.log(this.data);
+      this.ss.Search(this.query).subscribe(res=>
+        {this.resp=res.json()
+          this.data=this.resp.result;
+        console.log('Data:',this.resp);
+        }
+      )
+        // this.ss.Search(this.query).subscribe(data => {
+      //   // Read the result field from the JSON response.
+      //   this.data = data['result'];
+      //   console.log(this.data);
 
-      });
+      // });
+      
     }
   }
    

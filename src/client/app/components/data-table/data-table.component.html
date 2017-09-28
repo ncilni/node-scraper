@@ -1,0 +1,70 @@
+	 <!-- <ngx-datatable
+          class="table table-striped"
+          [columnMode]="'flex'"
+          [headerHeight]="50"
+          [footerHeight]="50"
+          [rowHeight]="'auto'"
+          [rows]="rows">
+          <ngx-datatable-column prop="Name" [flexGrow]="2">
+           <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+            <span
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-name'] = true"
+              *ngIf="!editing[rowIndex + '-name']">
+              {{value}}
+            </span>
+            <input
+              autofocus
+              (blur)="updateValue($event, 'name', rowIndex)"
+              *ngIf="editing[rowIndex+ '-name']"
+              type="text"
+              [value]="value"
+            />
+          </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Address" [flexGrow]="2">
+             <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+             <span
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-address'] = true"
+              *ngIf="!editing[rowIndex + '-address']">
+              {{value}}
+            </span>
+           <input
+              autofocus
+              (blur)="updateValue($event, 'address', rowIndex)"
+              *ngIf="editing[rowIndex+ '-address']"
+              type="text"
+              [value]="value"
+            />
+          </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Phone" [flexGrow]="1">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+             <span
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-phone'] = true"
+              *ngIf="!editing[rowIndex + '-phone']">
+              {{value}}
+            </span>
+           <input
+              autofocus
+              (blur)="updateValue($event, 'phone', rowIndex)"
+              *ngIf="editing[rowIndex+ '-phone']"
+              type="text"
+              [value]="value"
+            />
+          </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable> -->
+
+            <ngx-datatable
+        class="material striped"
+        [rows]="rows"
+        [columns]="columns"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="50">
+      </ngx-datatable>
+    
