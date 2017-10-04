@@ -1,11 +1,28 @@
-	 <!-- <ngx-datatable
-          class="table table-striped"
+	 <ngx-datatable
+          class="material"
           [columnMode]="'flex'"
           [headerHeight]="50"
           [footerHeight]="50"
           [rowHeight]="'auto'"
           [rows]="rows">
-          <ngx-datatable-column prop="Name" [flexGrow]="2">
+          <ngx-datatable-column prop="result_id" name="Result Id" [flexGrow]="2">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+             <span
+               title="Double click to edit"
+               (dblclick)="editing[rowIndex + '-name'] = true"
+               *ngIf="!editing[rowIndex + '-name']">
+               {{value}}
+             </span>
+             <input
+               autofocus
+               (blur)="updateValue($event, 'name', rowIndex)"
+               *ngIf="editing[rowIndex+ '-name']"
+               type="text"
+               [value]="value"
+             />
+           </ng-template>
+           </ngx-datatable-column>
+          <ngx-datatable-column prop="business_name" name="Business Name" [flexGrow]="2">
            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
             <span
               title="Double click to edit"
@@ -39,6 +56,43 @@
             />
           </ng-template>
           </ngx-datatable-column>
+
+          <ngx-datatable-column prop="EMAIL" name="Email" [flexGrow]="2">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+             <span
+               title="Double click to edit"
+               (dblclick)="editing[rowIndex + '-name'] = true"
+               *ngIf="!editing[rowIndex + '-name']">
+               {{value}}
+             </span>
+             <input
+               autofocus
+               (blur)="updateValue($event, 'name', rowIndex)"
+               *ngIf="editing[rowIndex+ '-name']"
+               type="text"
+               [value]="value"
+             />
+           </ng-template>
+           </ngx-datatable-column>
+
+           <ngx-datatable-column prop="contact_name" name="Contact Name" [flexGrow]="2">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+             <span
+               title="Double click to edit"
+               (dblclick)="editing[rowIndex + '-name'] = true"
+               *ngIf="!editing[rowIndex + '-name']">
+               {{value}}
+             </span>
+             <input
+               autofocus
+               (blur)="updateValue($event, 'name', rowIndex)"
+               *ngIf="editing[rowIndex+ '-name']"
+               type="text"
+               [value]="value"
+             />
+           </ng-template>
+           </ngx-datatable-column>
+
           <ngx-datatable-column name="Phone" [flexGrow]="1">
             <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
              <span
@@ -56,9 +110,9 @@
             />
           </ng-template>
           </ngx-datatable-column>
-        </ngx-datatable> -->
+        </ngx-datatable>
 
-            <ngx-datatable
+      <!-- <ngx-datatable
         class="material striped"
         [rows]="rows"
         [columns]="columns"
@@ -66,7 +120,7 @@
         [headerHeight]="50"
         [footerHeight]="50"
         [rowHeight]="auto">
-      </ngx-datatable>
+      </ngx-datatable> -->
     
 <!-- 
      <div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">

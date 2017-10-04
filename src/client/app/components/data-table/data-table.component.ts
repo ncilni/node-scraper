@@ -13,7 +13,7 @@ import 'C:/Users/neeraj.chauhan/Documents/July_2017/JumpCrew-Scraper/node_module
 export class DataTableComponent implements OnInit {
   editing = {};
   rows: Observable<any[]>;
-  columns = [{ prop: 'result_id', name: 'Result Id'  }, { prop:'business_name', name: 'Business Name' }, { name: 'Contact Name' }, { name: 'Address' }, { name: 'Email' }, { name: 'Job Title' }, { name: 'Phone' }, { name: 'Industry' }, { name: 'Website' }];
+  columns = [{ prop: 'result_id', name: 'Result Id'  }, { prop:'business_name', name: 'Business Name' }, {prop:'contact_name', name: 'Contact Name' }, {prop:'address', name: 'Address' }, {prop:'email', name: 'Email' }, {prop:'job_title', name: 'Job Title' }, {prop:'phone', name: 'Phone' }, { name: 'Industry' }, { name: 'Website' }];
   selected = [];
 
   

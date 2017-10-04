@@ -66,10 +66,6 @@ export class SearchFormComponent implements OnInit {
              return;
            }
  
-           //set latitude, longitude
-          //  this.latitude = place.geometry.location.lat();
-          //  this.longitude = place.geometry.location.lng();
-           
          });
        });
      });

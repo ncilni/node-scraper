@@ -12,7 +12,8 @@ import { Observable } from "rxjs/Observable";
     inputs: ['rows']
 })
 export class DataTableDemo1 {
-    rows:Observable<any>;
+    rows:any[];
+    
    
 
     itemResource = new DataTableResource(this.rows);
