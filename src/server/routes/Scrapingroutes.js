@@ -6,14 +6,14 @@ var mysql = require('mysql');
 var Xray = require('x-ray');
 var x = Xray();
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'root',
-  database : 'data_pool'
+  host     : 'mysql.intelegencia.com',
+  user     : 'user_listbuilder',
+  password : 'intel@01',
+  database : 'list_builder'
 });
 connection.connect(function(err){
 if(!err) {
-    // console.log("Database is connected ... nn");
+    console.log("Database is connected ... nn");
 } else {
     console.log("Error connecting database ... nn");
 }
@@ -262,6 +262,7 @@ exports.searchyp = function(req,res){
                     "Failure":"Internal Server Error"
                       });
                   }else{
+                    console.log(newresults);
                     res.send({
                       "code":200,
                       "success":"Records from db",
@@ -278,34 +279,6 @@ exports.searchyp = function(req,res){
 
 exports.searchmanta = function(req,res){
 
-
-  // function GetmantapageNumbers(indus, loc){
-    //   var resulturl='https://www.yelp.com/search?find_desc='+indus+'&find_loc='+loc+'&start=0';
-    //   var pages;
-    //   var records;
-    //   var finalpages;
-    //   var pagesNumber;
-    //   console.log()
-    //   x(resulturl, 'div.top-shelf', [{
-    //     TotalResults:'span.pagination-results-window'
-    //     }])(function(err, results){
-    //       records= results[0].TotalResults.replace(/\n            Showing 1-10 of |\n        /g,'');
-    //       console.log('no of pages', records);
-    //       pages=Math.round(records/10);
-    //       if(pages>100){
-    //         finalpages=99;
-    //         console.log('final pages=',finalpages);
-    //       }else{
-    //         finalpages=pages;
-    //         console.log('final pages=',finalpages);
-    //       }
-    //     });
-    //     pagesNumber=finalpages;
-    //     while(pagesNumber === undefined) {
-    //       require('deasync').runLoopOnce();
-    //     }
-    //     return pagesNumber;
-    // }
     var searchId;
     var industry = req.query.industry.replace(/ /g,'+');
     var location = req.query.location.replace(/ /g,'+');

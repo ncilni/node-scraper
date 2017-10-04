@@ -27,6 +27,7 @@
     "@swimlane/ngx-datatable": "^10.2.0",
     "@types/bootstrap": "^3.3.36",
     "@types/jquery": "^3.2.12",
+    "angular-2-data-table": "^0.1.2",
     "async": "^2.5.0",
     "bootstrap": "^3.3.7",
     "cheerio": "^1.0.0-rc.2",

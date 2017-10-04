@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import 'C:/Users/neeraj.chauhan/Documents/July_2017/JumpCrew-Scraper/node_modules/@swimlane/ngx-datatable/release/index.css'
+import 'C:/Users/neeraj.chauhan/Documents/July_2017/JumpCrew-Scraper/node_modules/@swimlane/ngx-datatable/release/themes/material.css';
+import 'C:/Users/neeraj.chauhan/Documents/July_2017/JumpCrew-Scraper/node_modules/@swimlane/ngx-datatable/release/assets/icons.css';
 
 @Component({
   selector: 'app-data-table',

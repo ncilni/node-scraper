@@ -5,6 +5,7 @@ import { FormsModule,  ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { AgmCoreModule } from '@agm/core';
 import { AppRoutingModule } from './app-routing.module';
+import { DataTableModule } from 'angular-2-data-table';
 import { AppComponent } from './app.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
@@ -15,6 +16,8 @@ import { ExporterComponent } from './components/exporter/exporter.component';
 import { CommonServiceService } from "./common-service.service";
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ResultCardComponent } from './components/result-card/result-card.component';
+import { DataTableDemo1 } from './components/demo1/data-table-demo1';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     SearchFormComponent,
     PageNotFoundComponent,
     ExporterComponent,
-    DataTableComponent
+    DataTableComponent,
+    ResultCardComponent,
+    DataTableDemo1
   ],
   imports: [
     AppRoutingModule, NgxDatatableModule, AgmCoreModule.forRoot({
@@ -35,7 +40,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     AppBootstrapModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    DataTableModule
   ],
   providers: [CommonServiceService],
   bootstrap: [AppComponent]

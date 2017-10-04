@@ -21,7 +21,7 @@ export class SearchResultComponent implements OnInit {
     Directory = '';
     Industry = '';
     Location = '';
-    data:any;
+    data:any={};
     resp:any;
     query={};
    industries = [
@@ -57,7 +57,7 @@ export class SearchResultComponent implements OnInit {
       
       this.Industry = this.route.snapshot.queryParams["industry"];
       let Loc = this.route.snapshot.queryParams["location"];
-      var re = /United States/gi; 
+      var re = / United States/gi; 
       this.Location = Loc.replace(re, ""); 
       this.Directory = this.route.snapshot.queryParams["directory"];
       console.log(this.Industry, this.Location, this.Directory);
