@@ -37,7 +37,7 @@
     </li>
   </ul>
 </nav> -->
-<div class="btn-group btn-group-lg" role="group" aria-label="...">
+<div  *ngIf="data" class="btn-group btn-group-lg" role="group" aria-label="...">
   <button type="button" class="btn btn-secondary" (click)="goPreviousPage()">Previous</button>
   <button type="button" class="btn btn-secondary" (click)="goNextPage()">Next</button>
 </div>

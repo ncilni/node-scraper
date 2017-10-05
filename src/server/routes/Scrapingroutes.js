@@ -258,7 +258,7 @@ exports.searchyp = function(req,res){
     });
 }
 
-exports.searchmanta = function(req,res){
+exports.searchmant = function(req,res){
 
     var searchId;
     var industry = req.query.industry.replace(/ /g,'%20');
@@ -452,3 +452,105 @@ exports.searchmanta = function(req,res){
                     //   "url": url
                     //     }); }, 500);
 };
+
+exports.searchmanta = function(req,res){
+  var searchId;
+  var resultId;
+  var industry = req.query.industry.replace(/ /g,'+');
+  var location = req.query.location.replace(/ /g,'+');
+  var page=req.query.page;
+  connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"' and search_directory='Yellow Pages'",function (error, result, fields){
+    if(error) {
+      res.send({
+        "code":500,
+        "Failure":"Internal Server Error"
+          });
+        }
+        else
+          {
+          console.log('results',result);
+          if(result.length==0){            
+              connection.query('SELECT searchId FROM search_history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
+              if(error) {
+                console.log("error occurred",error);
+                }else{
+                  searchId=result[0].searchId + 1;
+                }
+              });
+              connection.query('SELECT result_id FROM search_results ORDER BY result_id DESC LIMIT 1 ',function (error, result, fields){
+                if(error) {
+                  console.log("error occurred",error);
+                  }else{
+                    resultId=result[0].result_id;
+                  }
+                });
+            var values=[];
+            var jsonvalues=[];
+            var today = new Date();
+            var url='https://www.yellowpages.com/search?search_terms='+industry+'&geo_location_terms='+location+'&page='+page;
+            var search={
+              "location":req.query.location,
+              "industry":req.query.industry,
+              "search_directory":'Yellow Pages',
+              "date":today              
+            };
+            connection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
+            if(error) {
+              console.log("error ocurred",error);
+              res.send({
+                "code":400,
+                "failed":"error occurred while inserting into search history"
+              });
+            }else{
+              console.log('Entry made into search history');
+            }
+            });
+            x(url, 'div.v-card', [{
+            business_name:'a.business-name',
+            address: 'p.adr',
+            phone: 'div.phone.primary',
+            website:'a@href'
+            }])(function(err, results){
+              console.log('scraped results',results);
+              for(var i=0; i< results.length; i++){
+              var add= results[i].address+" ";
+              resultId++;
+              values.push([results[i].business_name,add,results[i].phone,results[i].website,searchId]);
+              jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":results[i].phone,"website":results[i].website, "search ID":searchId, "result_id":resultId });
+              }
+              connection.query('INSERT INTO search_results (business_name, address, phone, website, searchId) VALUES ?', [values], function(err,result) {
+                if(err) {
+                  console.log('DB Error');          
+                }
+                else {
+                  console.log('Successfully entered into the DB');
+                }
+                });
+                res.send({
+                "code":200,
+                "success":"entry made successfully",
+                "result":jsonvalues,
+                "url": url
+                  });
+                });
+            }else{
+              var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
+              connection.query(query,function(error, newresults, fields){
+                if(error) {
+                  res.send({
+                    "code":500,
+                    "Failure":"Internal Server Error"
+                      });
+                  }else{
+                    res.send({
+                      "code":200,
+                      "success":"Records from db",
+                      "result":newresults,
+                      "url": url
+                        });
+                  }
+                });              
+            }
+        }
+    });
+}

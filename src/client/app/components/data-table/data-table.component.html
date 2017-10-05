@@ -1,10 +1,12 @@
-	 <ngx-datatable
-          class=""
-          [columnMode]="'flex'"
-          [headerHeight]="50"
-          [footerHeight]="50"
-          [rowHeight]="'auto'"
-          [rows]="rows">
+  <ngx-datatable
+   class=""
+   [rows]="rows"
+   [columns]="columns"
+   [columnMode]="'flex'"
+  
+   [headerHeight]="50"
+   [footerHeight]="50"
+   [rowHeight]="50">>
           <ngx-datatable-column prop="result_id" name="Result Id" [flexGrow]="2">
             <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
              <span

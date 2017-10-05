@@ -45,16 +45,19 @@ export class SearchResultComponent implements OnInit {
     {id: 2, name: "Yellow Pages", value:'yp'},
     {id: 3, name: "Manta", value:'manta'}
   ];
+
+  private sub: any;
+  page:number;
      // end of declarations
 
 
 
      constructor(public ss:SearchService, public route:ActivatedRoute, public router:Router) { 
-       
+        
       }
       goNextPage(){
-        let current_page= this.route.snapshot.queryParams["page"];
-        var target_page=+current_page + 1;
+        this.page= this.route.snapshot.queryParams["page"];
+        var target_page=+this.page + 1;
         let loc = this.route.snapshot.queryParams["location"];
         let industry = this.route.snapshot.queryParams["industry"];
         let directory = this.route.snapshot.queryParams["directory"];
@@ -69,28 +72,24 @@ export class SearchResultComponent implements OnInit {
         this.router.navigate(['/result'],{ queryParams: { location: loc, industry: industry,  directory: directory, page: target_page } });
       }
 
+     
+
       ngOnInit() {
       
-      this.Industry = this.route.snapshot.queryParams["industry"];
-      let Loc = this.route.snapshot.queryParams["location"];
-      let page = this.route.snapshot.queryParams["page"];
-      var re = / United States/gi; 
-      this.Location = Loc.replace(re, ""); 
-      this.Directory = this.route.snapshot.queryParams["directory"];
-      console.log(this.Industry, this.Location, this.Directory);
-      this.query={industry:this.Industry, location: this.Location, directory: this.Directory, page:page};
-      this.ss.Search(this.query).subscribe(res=>
-        {this.resp=res.json()
-          this.data=this.resp.result;
-        console.log('Data:',this.resp);
-        }
-      )
-        // this.ss.Search(this.query).subscribe(data => {
-      //   // Read the result field from the JSON response.
-      //   this.data = data['result'];
-      //   console.log(this.data);
-
-      // });
+        this.Industry = this.route.snapshot.queryParams["industry"];
+        let Loc = this.route.snapshot.queryParams["location"];
+        let npage = this.route.snapshot.queryParams["page"];
+        var re = / United States/gi; 
+        this.Location = Loc.replace(re, ""); 
+        this.Directory = this.route.snapshot.queryParams["directory"];
+        console.log(this.Industry, this.Location, this.Directory);
+        this.query={industry:this.Industry, location: this.Location, directory: this.Directory, page:npage};
+        this.ss.Search(this.query).subscribe(res=>
+          {this.resp=res.json()
+            this.data=this.resp.result;
+          console.log('Data:',this.resp);
+          }
+        )
       
     }
   }
