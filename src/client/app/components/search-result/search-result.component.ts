@@ -49,19 +49,36 @@ export class SearchResultComponent implements OnInit {
 
 
 
-     constructor(public ss:SearchService, public route:ActivatedRoute) { 
+     constructor(public ss:SearchService, public route:ActivatedRoute, public router:Router) { 
        
+      }
+      goNextPage(){
+        let current_page= this.route.snapshot.queryParams["page"];
+        var target_page=+current_page + 1;
+        let loc = this.route.snapshot.queryParams["location"];
+        let industry = this.route.snapshot.queryParams["industry"];
+        let directory = this.route.snapshot.queryParams["directory"];
+        this.router.navigate(['/result'],{ queryParams: { location: loc, industry: industry,  directory: directory, page: target_page } });
+      }
+      goPreviousPage(){
+        let current_page= this.route.snapshot.queryParams["page"];
+        var target_page=+current_page - 1;
+        let loc = this.route.snapshot.queryParams["location"];
+        let industry = this.route.snapshot.queryParams["industry"];
+        let directory = this.route.snapshot.queryParams["directory"];
+        this.router.navigate(['/result'],{ queryParams: { location: loc, industry: industry,  directory: directory, page: target_page } });
       }
 
       ngOnInit() {
       
       this.Industry = this.route.snapshot.queryParams["industry"];
       let Loc = this.route.snapshot.queryParams["location"];
+      let page = this.route.snapshot.queryParams["page"];
       var re = / United States/gi; 
       this.Location = Loc.replace(re, ""); 
       this.Directory = this.route.snapshot.queryParams["directory"];
       console.log(this.Industry, this.Location, this.Directory);
-      this.query={industry:this.Industry, location: this.Location, directory: this.Directory};
+      this.query={industry:this.Industry, location: this.Location, directory: this.Directory, page:page};
       this.ss.Search(this.query).subscribe(res=>
         {this.resp=res.json()
           this.data=this.resp.result;

@@ -77,6 +77,6 @@ export class SearchFormComponent implements OnInit {
      var re = /,/gi; 
      var loc = query.replace(re, ""); 
      console.log(req);
-     this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory } });
+     this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory, page: 1 } });
    }
   }

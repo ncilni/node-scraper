@@ -17,7 +17,7 @@ import { CommonServiceService } from "./common-service.service";
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ResultCardComponent } from './components/result-card/result-card.component';
-import { DataTableDemo1 } from './components/demo1/data-table-demo1';
+
 
 @NgModule({
   declarations: [
@@ -28,8 +28,7 @@ import { DataTableDemo1 } from './components/demo1/data-table-demo1';
     PageNotFoundComponent,
     ExporterComponent,
     DataTableComponent,
-    ResultCardComponent,
-    DataTableDemo1
+    ResultCardComponent
   ],
   imports: [
     AppRoutingModule, NgxDatatableModule, AgmCoreModule.forRoot({
@@ -40,8 +39,7 @@ import { DataTableDemo1 } from './components/demo1/data-table-demo1';
     AppBootstrapModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule,
-    DataTableModule
+    CoreModule
   ],
   providers: [CommonServiceService],
   bootstrap: [AppComponent]

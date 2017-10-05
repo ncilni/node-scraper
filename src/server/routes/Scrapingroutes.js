@@ -47,76 +47,13 @@ function GetyelppageNumbers(indus, loc){
     }
     return pagesNumber;
 }
-exports.searchyelp = function(req,res){
-  var searchId;
-  var industry = req.query.industry.replace(/ /g,'+');
-  var location = req.query.location.replace(/ /g,'+');
-  connection.query('SELECT searchId FROM searchhistory ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
-  if(error) {
-    console.log("error ocurred",error);
-    }else{
-      searchId=result[0].searchId + 1;
-    }
-  });
-  console.log("req",req.query);
-  var values=[];
-  var jsonvalues=[];
-  var today = new Date();
-  var industry = req.query.industry.replace(/ /g,'%20');
-  var location = req.query.location.replace(/ /g,'%20');//"Test%20-%20Text"
-  var url='https://www.yelp.com/search?find_desc='+industry+'&find_loc='+location;
-  var search={
-    "location":req.query.location,
-    "industry":req.query.industry,
-    "date":today,
-    "SearchDir":'Yelp'
-  };
-  connection.query('INSERT INTO searchhistory SET ?',search, function (error, scrapes, fields) {
-  if(error) {
-    console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    });
-  }else{
-    console.log('Entry made into search history');
-  }
-  });
-  x(url, 'div.search-result', [{
-  Name:'a.biz-name.js-analytics-click',
-  address: 'address',
-  phone: 'span.biz-phone'
-  }])(function(err, results){
-  for(var i=0; i< results.length; i++){
-
-  // values.push([results[i].Name,results[i].address, results[i].phone]);
-  var add= results[i].address.replace(/\n        |\n    /g,'');
-  var phn= results[i].phone.replace(/\n        |\n    /g,'');
-  // var web='https://www..com';
-  values.push([results[i].Name,add,phn,url,searchId]);
-  jsonvalues.push({"Name":results[i].Name,"address":add,"phone":phn});
-  }
-  console.log('values', values);
-  console.log('json', jsonvalues);
-  connection.query('INSERT INTO Results (Name, address, phone,website,SearchId) VALUES ?', [values], function(err,result) {
-    if(err) {
-       console.log('DB Error');
-     }
-    else {
-       console.log('Success');
-     }
-    });
-    res.send({
-    "code":200,
-    "success":"entry made successfully",
-    "result":jsonvalues,
-    "url": url
-      });
-    });
-};
 
 exports.searchyelp = function(req,res){
+  var page=req.query.page;
+  console.log('page requested', page);
+  var start=(page-1)*10;
   var searchId;
+  var resultId;
   var industry = req.query.industry.replace(/ /g,'+');
   var location = req.query.location.replace(/ /g,'+');
   connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"' and search_directory='Yelp'",function (error, result, fields){
@@ -137,10 +74,18 @@ exports.searchyelp = function(req,res){
                   searchId=result[0].searchId + 1;
                 }
               });
+              connection.query('SELECT result_id  FROM search_results ORDER BY result_id DESC LIMIT 1 ',function (error, result, fields){
+                if(error) {
+                  console.log("error occurred",error);
+                  }else{
+                    resultId=result[0].result_id;
+                  }
+                });
             var values=[];
             var jsonvalues=[];
             var today = new Date();
-            var url='https://www.yelp.com/search?find_desc='+industry+'&find_loc='+location;
+            var url='https://www.yelp.com/search?find_desc='+industry+'&find_loc='+location+'&start='+start;
+            console.log("url",url);
             var search={
               "location":req.query.location,
               "industry":req.query.industry,
@@ -167,8 +112,9 @@ exports.searchyelp = function(req,res){
               var add= results[i].address.replace(/\n        |\n    /g,'');
               var address= add +" ";
               var phn= results[i].phone.replace(/\n        |\n    /g,'');
+              resultId++;
               values.push([results[i].business_name,address,phn,url,searchId]);
-              jsonvalues.push({"Business Name":results[i].Name,"address":add,"phone":phn,"website":url, "search ID":searchId });
+              jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":phn,"website":url, "search ID":searchId, "result_id":resultId });
               }
               console.log('values', values);
               console.log('json', jsonvalues);
@@ -212,8 +158,10 @@ exports.searchyelp = function(req,res){
 
 exports.searchyp = function(req,res){
   var searchId;
+  var resultId;
   var industry = req.query.industry.replace(/ /g,'+');
   var location = req.query.location.replace(/ /g,'+');
+  var page=req.query.page;
   connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"' and search_directory='Yellow Pages'",function (error, result, fields){
     if(error) {
       res.send({
@@ -232,10 +180,17 @@ exports.searchyp = function(req,res){
                   searchId=result[0].searchId + 1;
                 }
               });
+              connection.query('SELECT result_id FROM search_results ORDER BY result_id DESC LIMIT 1 ',function (error, result, fields){
+                if(error) {
+                  console.log("error occurred",error);
+                  }else{
+                    resultId=result[0].result_id;
+                  }
+                });
             var values=[];
             var jsonvalues=[];
             var today = new Date();
-            var url='https://www.yellowpages.com/search?search_terms='+industry+'&geo_location_terms='+location;
+            var url='https://www.yellowpages.com/search?search_terms='+industry+'&geo_location_terms='+location+'&page='+page;
             var search={
               "location":req.query.location,
               "industry":req.query.industry,
@@ -262,8 +217,9 @@ exports.searchyp = function(req,res){
               console.log('scraped results',results);
               for(var i=0; i< results.length; i++){
               var add= results[i].address+" ";
+              resultId++;
               values.push([results[i].business_name,add,results[i].phone,results[i].website,searchId]);
-              jsonvalues.push({"Business Name":results[i].business_name,"address":add,"phone":results[i].phone,"website":results[i].website, "search ID":searchId});
+              jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":results[i].phone,"website":results[i].website, "search ID":searchId, "result_id":resultId });
               }
               connection.query('INSERT INTO search_results (business_name, address, phone, website, searchId) VALUES ?', [values], function(err,result) {
                 if(err) {
@@ -305,8 +261,9 @@ exports.searchyp = function(req,res){
 exports.searchmanta = function(req,res){
 
     var searchId;
-    var industry = req.query.industry.replace(/ /g,'+');
-    var location = req.query.location.replace(/ /g,'+');
+    var industry = req.query.industry.replace(/ /g,'%20');
+    var location = req.query.location.replace(/ /g,'%20');
+    var page=req.query.page;
     connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"' and search_directory='Manta'",function (error, result, fields){
       if(error) {
         res.send({
@@ -326,7 +283,8 @@ exports.searchmanta = function(req,res){
               var values=[];
               var jsonvalues=[];
               var today = new Date();
-              var url='https://www.manta.com/search?search_source=business&search='+industry+'&search_location='+location+'&pt=';
+              // var url='https://www.manta.com/search?search_source=business&search='+industry+'&search_location='+location+'&pt=';
+              var url='https://www.manta.com/search?search='+industry+'&pg='+page+'&search_location='+location;
               // var url='https://www.manta.com/search?search_source=business&search=plumbing+services&search_location=Denver+CO&pt=39.7525%2C-10';
               var search={
                 "location":req.query.location,

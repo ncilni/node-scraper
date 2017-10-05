@@ -12,7 +12,7 @@ export class SearchService {
 
 
   Search(query){
-   return this.http.get('/api/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory);
+   return this.http.get('/api/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory+'&page='+query.page);
     
   }
 
