@@ -1,0 +1,62 @@
+<!-- <form>
+    <div class="form-group">
+      <label for="exampleFormControlFile1">Example file input</label>
+      <input type="file" class="form-control-file" id="exampleFormControlFile1">
+    </div>
+  </form> -->
+
+  <div class="container">
+    
+      <div class="bg-faded p-4 my-4">
+        <hr class="divider">
+        <h2 class="text-center text-lg text-uppercase my-0">Export
+          <strong>Data</strong>
+        </h2>
+        <hr class="divider">
+        <form>
+          <div class="row">
+            <div class="form-group col-lg-12">
+              <label class="text-heading tms">1. First select an Industry:</label>
+              <select class="form-control tms" name="industry" [(ngModel)]="isSelectedIndustry"  (change)="selectIndustry($event)">
+                <option *ngFor="let industry of industries" [ngValue]="industry.name" class="tms" >{{industry.name}}</option>
+              </select>
+            </div>
+            <div  *ngIf="location.length>0" class="form-group col-lg-6">
+              <label class="text-heading tms">Location</label>
+              <select class="form-control tms" name="location" [(ngModel)]="isSelectedDirectory">
+                <option *ngFor="let loc of location" [ngValue]="loc.search_location" class="tms">{{loc.search_location}}</option>
+              </select>         
+            </div>
+            <div  *ngIf="location.length>0" class="form-group col-lg-6" name="format" [(ngModel)]="isSelectedFormat">
+                    <label class="text-heading tms">Format:</label>
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label">
+                              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> CSV
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> XSL
+                        </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> PDF
+                        </label>
+                        </div>
+                    </div>
+            </div>
+            <div  *ngIf="location.length>0" class="form-group col-lg-6">
+               <label class="text-heading tms">File Name:</label>
+               <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="File Name">
+            </div>
+            <div  *ngIf="location.length>0" class="form-group col-lg-6">
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary tms" type="button" (click)="searchList(searchtxt.value)">Go!</button>
+                </span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>

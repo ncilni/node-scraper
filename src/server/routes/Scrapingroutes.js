@@ -113,12 +113,12 @@ exports.searchyelp = function(req,res){
               var address= add +" ";
               var phn= results[i].phone.replace(/\n        |\n    /g,'');
               resultId++;
-              values.push([results[i].business_name,address,phn,url,searchId]);
-              jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":phn,"website":url, "search ID":searchId, "result_id":resultId });
+              values.push([results[i].business_name,address,phn,url,searchId,req.query.location,req.query.industry]);
+              jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":phn,"website":url, "search ID":searchId, "result_id":resultId, "industry":req.query.industry, "search_location":req.query.location });
               }
               console.log('values', values);
               console.log('json', jsonvalues);
-              connection.query('INSERT INTO search_results (business_name, address, phone, website, searchId) VALUES ?', [values], function(err,result) {
+              connection.query('INSERT INTO search_results (business_name, address, phone, website, searchId, search_location, industry) VALUES ?', [values], function(err,result) {
                 if(err) {
                   console.log('DB Error');          
                 }

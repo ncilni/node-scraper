@@ -40,5 +40,30 @@ router.get('/', function (req, res) {
             }
           });              
       });
+
+
+  router.get('/location', function (req, res) {
+    var industry= req.query.industry;
+    console.log(industry);
+    var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
+    connection.query(query,function(error, newresults, fields){
+      if(error) {
+        res.send({
+          "code":500,
+          "Failure":"Internal Server Error"
+            });
+        }else{
+          console.log(newresults);
+          res.send({
+            "code":200,
+            "success":"Records from db",
+            "result":newresults
+              });
+        }
+      });              
+  });
+
+
+
   
   module.exports = router;
