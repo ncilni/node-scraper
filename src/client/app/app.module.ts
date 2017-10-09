@@ -17,6 +17,8 @@ import { CommonServiceService } from "./common-service.service";
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ResultCardComponent } from './components/result-card/result-card.component';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+
 
 
 @NgModule({
@@ -36,6 +38,7 @@ import { ResultCardComponent } from './components/result-card/result-card.compon
       libraries: ["places"],region:'US'     
     }),
     BrowserModule,
+    Ng2SmartTableModule,
     AppBootstrapModule,
     FormsModule,
     ReactiveFormsModule,

@@ -38,6 +38,7 @@
     "express": "^4.15.3",
     "morgan": "^1.8.2",
     "mysql": "^2.14.1",
+    "ng2-smart-table": "^1.2.2",
     "ngrx": "^2.0.1",
     "ngx-bootstrap": "^1.9.3",
     "pug": "^2.0.0-rc.2",

@@ -20,6 +20,9 @@ export class SearchService {
    return this.http.get('/api/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory+'&page='+query.page);
     
   }
+  getHistory(){
+    return this.http.get('/api/history/');
+  }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);

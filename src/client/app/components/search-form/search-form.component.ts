@@ -18,9 +18,10 @@ export class SearchFormComponent implements OnInit {
    public searchControl: FormControl;
    @ViewChild("searchtxt")
    public searchElementRef: ElementRef;
-   isSelectedDirectory = 'Site Search';
-   isSelectedIndustry = 'Industry';
-   isSelectedLocation = '';
+   isSelectedDirectory;
+   isSelectedIndustry;
+   isSelectedLocation;
+    Validator:boolean=false;
    industries = [
     {id: 1, name: "Hotels"},
     {id: 2, name: "Real Estate"},
@@ -73,10 +74,18 @@ export class SearchFormComponent implements OnInit {
   
  
    searchList(query){
+     console.log('query:', query, this.isSelectedLocation);
      var req = { "location": query,"industry": this.isSelectedIndustry, "directory": this.isSelectedDirectory};
      var re = /,/gi; 
      var loc = query.replace(re, ""); 
-     console.log(req);
-     this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory, page: 1 } });
+    //  console.log(req);
+    //  this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory, page: 1 } });
    }
+  
+   validcheck(value){
+      return value === undefined ? true : false;
+   }
+ 
   }
+
+  

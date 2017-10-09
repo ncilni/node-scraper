@@ -24,28 +24,24 @@ export class SearchResultComponent implements OnInit {
     data:any={};
     resp:any;
     query={};
-   industries = [
-    {id: 1, name: "Hotels"},
-    {id: 2, name: "Real Estate"},
-    {id: 3, name: "eCommerce"},
-    {id: 4, name: "Beauty Products"},
-    {id: 5, name: "Clothing"},
-    {id: 6, name: "Niche Food Services"},
-    {id: 7, name: "Coffee Shops"},
-    {id: 8, name: "Wedding Cakes"},
-    {id: 9, name: "Dentist"},
-    {id: 10, name: "Car Dealerships"},
-    {id: 11, name: "Lawyers"},
-    {id: 12, name: "Jewellery Stores"},
-    {id: 13, name: "HVAC"},
-    {id: 14, name: "Landscaping"}
-  ];
-  directories = [
-    {id: 1, name: "Yelp", value:'yelp'},
-    {id: 2, name: "Yellow Pages", value:'yp'},
-    {id: 3, name: "Manta", value:'manta'}
-  ];
 
+
+  settings = {
+    columns: {
+      business_name: {
+        title: 'Business Name'
+      },
+      address: {
+        title: 'Address'
+      },
+      phone: {
+        title: 'Phone'
+      },
+      website: {
+        title: 'Website'
+      }
+    }
+  };
   private sub: any;
   page:number;
      // end of declarations

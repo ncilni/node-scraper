@@ -23,7 +23,9 @@
 
     </table> -->
 <div class="container-fluid" *ngIf="data">
-<app-data-table *ngIf="data" [rows]="data"></app-data-table>
+  <ng2-smart-table *ngIf="data" [settings]="settings" [source]="data"></ng2-smart-table>
+
+  <!-- <app-data-table *ngIf="data" [rows]="data"></app-data-table> -->
 <!-- <nav *ngIf="data" aria-label="...">
   <ul class="pagination pagination-lg">
     <li class="page-item disabled">
@@ -37,10 +39,10 @@
     </li>
   </ul>
 </nav> -->
-<div  *ngIf="data" class="btn-group btn-group-lg" role="group" aria-label="...">
+<!-- <div  *ngIf="data" class="btn-group btn-group-lg" role="group" aria-label="...">
   <button type="button" class="btn btn-secondary" (click)="goPreviousPage()">Previous</button>
   <button type="button" class="btn btn-secondary" (click)="goNextPage()">Next</button>
-</div>
+</div> -->
 </div>
 
 <div class="container">
