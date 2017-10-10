@@ -27,7 +27,13 @@
                 <option *ngFor="let loc of location" [ngValue]="loc.search_location" class="tms">{{loc.search_location}}</option>
               </select>         
             </div>
-            <div  *ngIf="location.length>0" class="form-group col-lg-6" name="format" [(ngModel)]="isSelectedFormat" required>
+            <div  *ngIf="location.length>0" class="form-group col-lg-6">
+              <label class="text-heading tms">Format:</label>
+              <select class="form-control tms" name="format" [(ngModel)]="isSelectedFormat" (change)="downloadFile()" required>
+                <option *ngFor="let format of formats" [ngValue]="format.name" class="tms">{{format.name}}</option>
+              </select>         
+            </div>
+            <!-- <div  *ngIf="location.length>0" class="form-group col-lg-6" name="format" [(ngModel)]="isSelectedFormat" required>
                     <label class="text-heading tms">Format:</label>
                     <div class="form-control">
                         <div class="form-check form-check-inline">
@@ -46,14 +52,14 @@
                         </label>
                         </div>
                     </div>
-            </div>
-            <!-- <div  *ngIf="location.length>0" class="form-group col-lg-6">
-               <label class="text-heading tms">File Name:</label>
-               <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="File Name">
             </div> -->
+         
             <div  *ngIf="location.length>0" class="form-group col-lg-6">
                 <span class="input-group-btn">
-                    <button class="btn btn-secondary tms" [disabled]="!exporterForm.valid" type="button" (click)="downloadFile(searchtxt.value)">Download</button>
+                    <!-- <button class="btn btn-secondary tms" [disabled]="!exporterForm.valid" type="button" >Download</button> -->
+                    <a class="btn btn-primary btn-lg" href={{filepath}} download  [hidden]="!exporterForm.valid">
+                      Download File
+                   </a>
                 </span>
             </div>
           </div>

@@ -33,11 +33,17 @@ export class ExporterComponent implements OnInit {
    {id: 13, name: "HVAC"},
    {id: 14, name: "Landscaping"}
  ];
+ formats = [
+  {id: 1, name: "csv"},
+  {id: 2, name: "xls"},
+  {id: 3, name: "pdf"}
+];
  location:any ={};
  data:any={};
  resp:any={};
  resultData:any={};
  resultResp:any;
+ filepath;
  settings = {
   actions:{
     add: false,
@@ -78,6 +84,22 @@ export class ExporterComponent implements OnInit {
       {this.data=res.json()
       this.location=this.data.result;
       console.log('Data:',this.data);
+   
+      }
+    )
+
+  }
+  showformat(){
+    console.log('selected format:',this.isSelectedFormat);
+  }
+
+  downloadFile(){
+    // console.log('format:',this.isSelectedFormat);
+    var req = { "location": this.isSelectedLocation,"industry": this.isSelectedIndustry, "format":this.isSelectedFormat};
+    this.ss.downloadFile(req).subscribe(res=>
+      {this.data=res.json()
+      console.log('Data:',this.data);
+      this.filepath='tmp/'+this.data.format+'/'+this.data.file_name+'.'+this.data.format;
       }
     )
 

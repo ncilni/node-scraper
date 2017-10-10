@@ -45,12 +45,13 @@ router.get('/', function (req, res) {
 
 router.get('/download', function (req, res) {
   var format= req.query.format;
+  console.log('inside download api');
   switch(format){
     case "csv": 
       download.csv(req, res);
       break;
     case "xsl":
-      download.xsl(req, res);
+      download.xls(req, res);
       break;
     case "pdf":
       download.pdf(req, res);
