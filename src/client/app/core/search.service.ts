@@ -24,6 +24,10 @@ export class SearchService {
     return this.http.get('/api/history/');
   }
 
+  getHistoryResults(query){
+    return this.http.get('/api/history/results/?location='+query.location+'&industry='+query.industry);
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);

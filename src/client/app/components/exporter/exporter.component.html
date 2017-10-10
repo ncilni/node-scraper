@@ -13,21 +13,21 @@
           <strong>Data</strong>
         </h2>
         <hr class="divider">
-        <form>
+        <form #exporterForm="ngForm">
           <div class="row">
             <div class="form-group col-lg-12">
               <label class="text-heading tms">1. First select an Industry:</label>
-              <select class="form-control tms" name="industry" [(ngModel)]="isSelectedIndustry"  (change)="selectIndustry($event)">
+              <select class="form-control tms" name="industry" [(ngModel)]="isSelectedIndustry"  (change)="selectIndustry($event)" required>
                 <option *ngFor="let industry of industries" [ngValue]="industry.name" class="tms" >{{industry.name}}</option>
               </select>
             </div>
             <div  *ngIf="location.length>0" class="form-group col-lg-6">
               <label class="text-heading tms">Location</label>
-              <select class="form-control tms" name="location" [(ngModel)]="isSelectedDirectory">
+              <select class="form-control tms" name="location" [(ngModel)]="isSelectedLocation" (change)="showResults($event)" required>
                 <option *ngFor="let loc of location" [ngValue]="loc.search_location" class="tms">{{loc.search_location}}</option>
               </select>         
             </div>
-            <div  *ngIf="location.length>0" class="form-group col-lg-6" name="format" [(ngModel)]="isSelectedFormat">
+            <div  *ngIf="location.length>0" class="form-group col-lg-6" name="format" [(ngModel)]="isSelectedFormat" required>
                     <label class="text-heading tms">Format:</label>
                     <div class="form-control">
                         <div class="form-check form-check-inline">
@@ -47,16 +47,22 @@
                         </div>
                     </div>
             </div>
-            <div  *ngIf="location.length>0" class="form-group col-lg-6">
+            <!-- <div  *ngIf="location.length>0" class="form-group col-lg-6">
                <label class="text-heading tms">File Name:</label>
                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="File Name">
-            </div>
+            </div> -->
             <div  *ngIf="location.length>0" class="form-group col-lg-6">
                 <span class="input-group-btn">
-                    <button class="btn btn-secondary tms" type="button" (click)="searchList(searchtxt.value)">Go!</button>
+                    <button class="btn btn-secondary tms" [disabled]="!exporterForm.valid" type="button" (click)="downloadFile(searchtxt.value)">Download</button>
                 </span>
             </div>
           </div>
         </form>
-      </div>
+    
+      
+    <div class="container" *ngIf="resp.length>0">
+      <ng2-smart-table *ngIf="resp.length>0" [settings]="settings" [source]="resp"></ng2-smart-table>
     </div>
+    
+  </div>
+</div>

@@ -14,9 +14,9 @@ export class ExporterComponent implements OnInit {
   public searchControl: FormControl;
   @ViewChild("searchtxt")
   public searchElementRef: ElementRef;
-  isSelectedDirectory = 'Site Search';
-  isSelectedIndustry = 'Industry';
-  isSelectedLocation = '';
+  isSelectedIndustry ;
+  isSelectedLocation;
+  isSelectedFormat;
   industries = [
    {id: 1, name: "Hotels"},
    {id: 2, name: "Real Estate"},
@@ -35,23 +35,43 @@ export class ExporterComponent implements OnInit {
  ];
  location:any ={};
  data:any={};
- resp:any;
+ resp:any={};
+ resultData:any={};
+ resultResp:any;
+ settings = {
+  actions:{
+    add: false,
+    edit: false,
+    delete: false
+  },
+  columns: {
+    result_id: {
+      title: 'Result Id'
+    },
+    business_name:{
+      title: 'Business Name'
+    },
+    search_location: {
+      title: 'Location'
+    },
+    industry: {
+      title: 'Industry'
+    },
+    searchId: {
+      title: 'Search Id'
+    },
+    date: {
+      title: 'Date'
+    }
+  }
+};
+
     // end of declarations
 
     constructor(private mapsAPILoader: MapsAPILoader,
      private ngZone: NgZone,public ss:SearchService, public router:Router) { }
 
  ngOnInit() {  }
- 
-
-  searchList(query){
-    var req = { "location": query,"industry": this.isSelectedIndustry, "directory": this.isSelectedDirectory};
-    var re = /,/gi; 
-    var loc = query.replace(re, ""); 
-    console.log(req);
-    this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory, page: 1 } });
-  }
-
   selectIndustry($event){
     console.log('option selected', this.isSelectedIndustry);
     this.ss.getLocation(this.isSelectedIndustry).subscribe(res=>
@@ -61,6 +81,17 @@ export class ExporterComponent implements OnInit {
       }
     )
 
+  }
+
+  showResults($event){
+    console.log('option selected', this.isSelectedLocation);
+    var req = { "location": this.isSelectedLocation,"industry": this.isSelectedIndustry};
+    this.ss.getHistoryResults(req).subscribe(res=>
+      {this.resultData=res.json()
+        this.resp=this.resultData.result;
+      console.log('Data:',this.resultData);
+      }
+    )
   }
 
 }
