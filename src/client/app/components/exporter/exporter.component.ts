@@ -1,3 +1,5 @@
+import * as jsPDF from 'jspdf';
+import * as jpt from 'jspdf-autotable';
 import { Component, OnInit, NgZone, ViewChild, ElementRef,EventEmitter  } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MapsAPILoader } from '@agm/core';
@@ -8,7 +10,8 @@ import { SearchService } from '../../core/search.service';
 import {CsvService} from "angular2-json2csv";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { jsPDF } from 'jspdf';
+
+
 @Component({
   selector: 'app-exporter',
   templateUrl: './exporter.component.html',
@@ -228,7 +231,6 @@ export class ExporterComponent implements OnInit {
      
 
 
-      var doc = new jsPDF();
       var col = ["Id", "Business Name","Address","Contact Name"];
       var rows = [];
   
@@ -237,8 +239,54 @@ export class ExporterComponent implements OnInit {
           var temp = [item[key].result_id, item[key].business_name,item[key].address,item[key].contact_name];
           rows.push(temp);
       }
+
+      var doc = new jsPDF('l', 'mm', [595.28, 841.89]);  jpt; 
   
-      doc.autoTable(col, rows);
+      doc.autoTable(col, rows, {
+        showHeader: 'Industry='+this.isSelectedIndustry+'and Location='+this.isSelectedLocation,
+        styles: { fontSize: 16,
+          overflow: 'linebreak',
+          columnWidth: 'auto',
+          lineWidth: 1,
+          lineColor: [85, 51, 27]
+        },
+        theme: 'grid', // 'striped', 'grid' or 'plain'
+        headerStyles: {
+              fillColor: [189, 200, 255],
+              textColor: [12, 1, 1]
+          },
+        avoidPageSplit: true,
+        margin: { right: 30 }
+    });
+
+
+
+
+      // doc.autoTable(col, rows,{
+      //   theme: 'grid', // 'striped', 'grid' or 'plain'
+      //   headerStyles: {
+      //         fillColor: [189, 200, 255],
+      //         textColor: [12, 1, 1]
+      //     },
+      //     pdfSize:'a1',
+      //    // margin: { top: 50, left: 20, right: 20, bottom: 0 },
+      //   styles: {
+      //         overflow: 'linebreak',
+      //         columnWidth: 'auto',
+      //         lineWidth: 1,
+      //         lineColor: [85, 51, 27]
+              
+      //       },
+      //       pageBreak: 'avoid',
+      //       beforePageContent: function(data) {
+      //         doc.setFontSize(12);
+      //           doc.text("Results for Industry :"+this.isSelectedIndustry+"  ||   "+"Location :"+this.isSelectedLocation, 20, 15);
+                
+      //       },
+      //     columnStyles: {
+      //       //0: {columnWidth: 200}
+      //     }
+      //   });
   
       doc.save(fname+'.pdf');
     
@@ -283,7 +331,7 @@ export class ExporterComponent implements OnInit {
          break; 
       } 
       case 'pdf': { 
-        this.createPdf("Hello");
+        this.createPdf(this.file_name);
          break; 
       } 
    } 

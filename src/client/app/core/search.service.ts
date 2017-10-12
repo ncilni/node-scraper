@@ -27,9 +27,9 @@ export class SearchService {
   getHistoryResults(query){
     return this.http.get('/api/history/results/?location='+query.location+'&industry='+query.industry);
   }
-  downloadFile(query){
-    return this.http.get('/api/history/download/?location='+query.location+'&industry='+query.industry+'&format='+query.format);
-  }
+  // downloadFile(query){
+  //   return this.http.get('/api/history/download/?location='+query.location+'&industry='+query.industry+'&format='+query.format);
+  // }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
