@@ -5,12 +5,17 @@ import { Router } from '@angular/router';
 import { } from 'googlemaps';
 import { CommonServiceService } from '../../common-service.service';
 import { SearchService } from '../../core/search.service';
+import {CsvService} from "angular2-json2csv";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { jsPDF } from 'jspdf';
 @Component({
   selector: 'app-exporter',
   templateUrl: './exporter.component.html',
   styleUrls: ['./exporter.component.css']
 })
 export class ExporterComponent implements OnInit {
+  file_name: string;
   public searchControl: FormControl;
   @ViewChild("searchtxt")
   public searchElementRef: ElementRef;
@@ -75,34 +80,213 @@ export class ExporterComponent implements OnInit {
     // end of declarations
 
     constructor(private mapsAPILoader: MapsAPILoader,
-     private ngZone: NgZone,public ss:SearchService, public router:Router) { }
+     private ngZone: NgZone,public ss:SearchService, public router:Router, private _csvService: CsvService) { }
 
- ngOnInit() {  }
+  ngOnInit() { }
   selectIndustry($event){
     console.log('option selected', this.isSelectedIndustry);
     this.ss.getLocation(this.isSelectedIndustry).subscribe(res=>
       {this.data=res.json()
       this.location=this.data.result;
       console.log('Data:',this.data);
-   
       }
     )
-
   }
+
+  saveExcel(param: any, filename: string) {
+    var wb = new Workbook();
+
+    var write = new Array;
+    param.forEach(function (row,index) {
+
+        var each = new Array;
+        var keys = Object.keys(row); // all the keys
+        if (index == 0) {
+            // column headers
+            for (var i = 0; i < keys.length; i++) {
+                each.push(keys[i]);
+            }
+            write.push(each); // write header
+            each = [];
+            for (var i = 0; i < keys.length; i++) {
+                each.push(row[keys[i]]);
+            }
+        }
+        else
+        {
+            for (var i = 0; i < keys.length; i++) {
+                each.push(row[keys[i]]);
+            }
+        }
+        write.push(each);
+    }, this);
+
+    var data = write;
+
+    var ws_name = "Sheet 1";
+    wb.SheetNames.push(ws_name);
+    wb.Sheets[ws_name] = this.sheet_from_array_of_arrays(data);
+
+    var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' }); //bookSST: true,
+    saveAs(new Blob([this.s2ab(wbout)], { type: "application/octet-stream" }), filename+".xlsx");
+  }
+
+  s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
+
+  sheet_from_array_of_arrays(data: any, opts?: any): any {
+    var ws: any = {};
+  
+    var wscols = [
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 }
+    ];
+  
+    var startCell = { c: 10000000, r: 10000000 };
+    var endCell = { c: 0, r: 0 };
+  
+    var range = { s: startCell, e: endCell };
+    for (var R = 0; R != data.length; ++R) {
+        for (var C = 0; C != data[R].length; ++C) {
+            if (range.s.r > R) range.s.r = R;
+            if (range.s.c > C) range.s.c = C;
+            if (range.e.r < R) range.e.r = R;
+            if (range.e.c < C) range.e.c = C;
+            //var cell = { v: data[R][C], t: 'n' };
+            //if (cell.v == null) continue;
+            //var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
+  
+            //if (typeof cell.v === 'number') cell.t = 'n';
+            //else if (typeof cell.v === 'boolean') cell.t = 'b';
+            //else cell.t = 's';
+  
+            //var cell = new Cell();
+            var cell: any = {};
+            cell.v = data[R][C];
+            //console.log(cell);
+            var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
+            //console.log(cell_ref);
+            if (cell.v == null) continue;
+            if (typeof cell.v === 'number') cell.t = 'n';
+            else if (typeof cell.v === 'boolean') cell.t = 'b';
+            else cell.t = 's';
+            //console.log(cell);
+            ws[cell_ref] = cell;
+            //console.log(ws);
+        }
+    }
+    if (range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(startCell, endCell);
+    ws['!cols'] = wscols;
+    return ws;
+  }
+
+
+
+  
   showformat(){
     console.log('selected format:',this.isSelectedFormat);
   }
 
+  createPdf(fname){
+    console.log("inside createPdf", fname);
+      // var item =[ {
+      //   "Name" : "XYZ",
+      //   "Age" : "22",
+      //   "Gender" : "Male"
+      // },
+      // {
+      //  "Name" : "XYZ",
+      //   "Age" : "22",
+      //   "Gender" : "Male"
+      // }];
+      var item=[  
+      {result_id: 2179, business_name: "Sugar Shack Donuts & Coffee", address: "1932 9th St NWWashington, DC 20001 ", email: null, contact_name: null},
+      {result_id: 2180, business_name: "Blue Bottle Coffee", address: "1046 Potomac St NWWashington, DC 20007 ", email: null, contact_name: null},
+      {result_id: 2181, business_name: "A Baked Joint", address: "440 K St NWWashington, DC 20001 ", email: null, contact_name: null},
+      {result_id: 2182, business_name: "La Colombe Coffee", address: "924 Rear N St NWWashington, DC 20001 ", email: null, contact_name: null},
+      {result_id: 2183, business_name: "Bakers & Baristas", address: "501 7th St NWWashington, DC 20004 ", email: null, contact_name: null},
+      {result_id: 2184, business_name: "Swing’s Coffee", address: "640 14th St NWWashington, DC 20005 ", email: null, contact_name: null},
+      {result_id: 2185, business_name: "The Coffee Bar", address: "1201 S St NWWashington, DC 20009 ", email: null, contact_name: null},
+      {result_id: 2186, business_name: "Bourbon Coffee", address: "2101 L St NWWashington, DC 20037 ", email: null, contact_name: null},
+      {result_id: 2187, business_name: "The Wydown Coffee Bar", address: "1924 14th St NWWashington, DC 20009 ", email: null, contact_name: null},
+      {result_id: 2188, business_name: "Emissary", address: "2032 P St NWWashington, DC 20036 ", email: null, contact_name: null},
+      {result_id: 2189, business_name: "Filter Coffeehouse & Espresso Bar", address: "1726 20th St NWWashington, DC 20009 ", email: null, contact_name: null}
+      ];
+     
+
+
+      var doc = new jsPDF();
+      var col = ["Id", "Business Name","Address","Contact Name"];
+      var rows = [];
+  
+      
+      for(var key in item){
+          var temp = [item[key].result_id, item[key].business_name,item[key].address,item[key].contact_name];
+          rows.push(temp);
+      }
+  
+      doc.autoTable(col, rows);
+  
+      doc.save(fname+'.pdf');
+    
+
+
+  }
+
+  createCsv(fname){
+    this._csvService.download(this.resp, fname);
+  }
+
+  createXls(fname){
+      // var data = [
+      //     [1, 2, 3],
+      //     [true, false, null, "sheetjs"],
+      //     ["foo", "bar", new Date("2014-02-19T14:30Z"), "0.3"],
+      //     ["baz", null, "qux"]
+      //   ];
+  
+    
+  
+      this.saveExcel(this.resp,fname );
+  
+    };
+  
+  
+  
+
   downloadFile(){
     // console.log('format:',this.isSelectedFormat);
-    var req = { "location": this.isSelectedLocation,"industry": this.isSelectedIndustry, "format":this.isSelectedFormat};
-    this.ss.downloadFile(req).subscribe(res=>
-      {this.data=res.json()
-      console.log('Data:',this.data);
-      this.filepath='tmp/'+this.data.format+'/'+this.data.file_name+'.'+this.data.format;
-      }
-    )
-
+    var re = / /gi; 
+    var loc = this.isSelectedLocation.replace(re, "_"); 
+    var indus = this.isSelectedIndustry.replace(re, "_"); 
+    this.file_name=loc+'_'+indus;
+    switch(this.isSelectedFormat) { 
+      case 'csv': { 
+         this.createCsv(this.file_name); 
+         break; 
+      } 
+      case 'xls': { 
+        this.createXls(this.file_name);
+         break; 
+      } 
+      case 'pdf': { 
+        this.createPdf("Hello");
+         break; 
+      } 
+   } 
   }
 
   showResults($event){
@@ -115,5 +299,9 @@ export class ExporterComponent implements OnInit {
       }
     )
   }
-
 }
+
+export class Workbook {
+  SheetNames: any = [];
+  Sheets: any = {};
+  }

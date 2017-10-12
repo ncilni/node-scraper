@@ -29,7 +29,7 @@
             </div>
             <div  *ngIf="location.length>0" class="form-group col-lg-6">
               <label class="text-heading tms">Format:</label>
-              <select class="form-control tms" name="format" [(ngModel)]="isSelectedFormat" (change)="downloadFile()" required>
+              <select class="form-control tms" name="format" [(ngModel)]="isSelectedFormat" (change)="showformat()" required>
                 <option *ngFor="let format of formats" [ngValue]="format.name" class="tms">{{format.name}}</option>
               </select>         
             </div>
@@ -56,10 +56,10 @@
          
             <div  *ngIf="location.length>0" class="form-group col-lg-6">
                 <span class="input-group-btn">
-                    <!-- <button class="btn btn-secondary tms" [disabled]="!exporterForm.valid" type="button" >Download</button> -->
-                    <a class="btn btn-primary btn-lg" href={{filepath}} download  [hidden]="!exporterForm.valid">
+                    <button class="btn btn-secondary tms" [disabled]="!exporterForm.valid" type="button" (click)="downloadFile()">Download</button>
+                    <!-- <a class="btn btn-primary btn-lg" href={{filepath}} download  [hidden]="!exporterForm.valid">
                       Download File
-                   </a>
+                   </a> -->
                 </span>
             </div>
           </div>
