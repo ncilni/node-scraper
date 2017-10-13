@@ -242,51 +242,54 @@ export class ExporterComponent implements OnInit {
 
       var doc = new jsPDF('l', 'mm', [595.28, 841.89]);  jpt; 
   
-      doc.autoTable(col, rows, {
-        showHeader: 'Industry='+this.isSelectedIndustry+'and Location='+this.isSelectedLocation,
-        styles: { fontSize: 16,
-          overflow: 'linebreak',
-          columnWidth: 'auto',
-          lineWidth: 1,
-          lineColor: [85, 51, 27]
-        },
+    //   doc.autoTable(col, rows, {
+    //     theme: 'grid', // 'striped', 'grid' or 'plain'
+    //       headerStyles: {
+    //             fillColor: [189, 200, 255],
+    //             textColor: [12, 1, 1]
+    //         },
+    //     showHeader: 'Industry='+this.isSelectedIndustry+'and Location='+this.isSelectedLocation,
+    //     styles: { fontSize: 16,
+    //       overflow: 'linebreak',
+    //       columnWidth: 'auto',
+    //       lineWidth: 1,
+    //       lineColor: [85, 51, 27]
+    //     },
+    //     avoidPageSplit: false,
+    //     margin: { right: 30 }
+    // });
+
+    var imgData = '';
+
+    
+      doc.autoTable(col, rows,{
         theme: 'grid', // 'striped', 'grid' or 'plain'
         headerStyles: {
               fillColor: [189, 200, 255],
               textColor: [12, 1, 1]
           },
-        avoidPageSplit: true,
-        margin: { right: 30 }
-    });
-
-
-
-
-      // doc.autoTable(col, rows,{
-      //   theme: 'grid', // 'striped', 'grid' or 'plain'
-      //   headerStyles: {
-      //         fillColor: [189, 200, 255],
-      //         textColor: [12, 1, 1]
-      //     },
-      //     pdfSize:'a1',
-      //    // margin: { top: 50, left: 20, right: 20, bottom: 0 },
-      //   styles: {
-      //         overflow: 'linebreak',
-      //         columnWidth: 'auto',
-      //         lineWidth: 1,
-      //         lineColor: [85, 51, 27]
+          pdfSize:'a1',
+         // margin: { top: 50, left: 20, right: 20, bottom: 0 },
+        styles: {
+              overflow: 'linebreak',
+              columnWidth: 'auto',
+              lineWidth: 1,
+              lineColor: [85, 51, 27]
               
-      //       },
-      //       pageBreak: 'avoid',
-      //       beforePageContent: function(data) {
-      //         doc.setFontSize(12);
-      //           doc.text("Results for Industry :"+this.isSelectedIndustry+"  ||   "+"Location :"+this.isSelectedLocation, 20, 15);
+            },
+            pageBreak: 'avoid',
+            beforePageContent: function(data) {
+              doc.setFontSize(20);
+                doc.text("Results for Industry :  ||   Location :", 20, 15);
                 
-      //       },
-      //     columnStyles: {
-      //       //0: {columnWidth: 200}
-      //     }
-      //   });
+            },
+          columnStyles: {
+            //0: {columnWidth: 200}
+          }
+        });
+
+        doc.text(35, 25, "Octonyan loves jsPDF");
+        doc.addImage(imgData, 'JPEG', 15, 40, 180, 180);
   
       doc.save(fname+'.pdf');
     
@@ -299,15 +302,6 @@ export class ExporterComponent implements OnInit {
   }
 
   createXls(fname){
-      // var data = [
-      //     [1, 2, 3],
-      //     [true, false, null, "sheetjs"],
-      //     ["foo", "bar", new Date("2014-02-19T14:30Z"), "0.3"],
-      //     ["baz", null, "qux"]
-      //   ];
-  
-    
-  
       this.saveExcel(this.resp,fname );
   
     };
