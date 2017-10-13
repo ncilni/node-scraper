@@ -5,7 +5,6 @@ import { FormControl } from '@angular/forms';
 import { MapsAPILoader } from '@agm/core';
 import { Router } from '@angular/router';
 import { } from 'googlemaps';
-import { CommonServiceService } from '../../common-service.service';
 import { SearchService } from '../../core/search.service';
 import {CsvService} from "angular2-json2csv";
 import * as XLSX from 'xlsx';

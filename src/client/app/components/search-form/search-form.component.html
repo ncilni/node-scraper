@@ -27,7 +27,7 @@
             <div class="input-group">
               <input  type="text" [(ngModel)]="isSelectedLocation" class="form-control tms" [formControl]="searchControl" text="" #searchtxt required>
               <span class="input-group-btn">
-                <button class="btn btn-secondary tms"  [disabled]="!searchForm.valid + validcheck(isSelectedLocation)" type="submit" >Search</button>
+                <button class="btn btn-secondary tms"  [disabled]="!searchForm.valid" type="submit" >Search</button>
               </span>
           </div>
         

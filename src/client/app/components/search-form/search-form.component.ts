@@ -3,8 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MapsAPILoader } from '@agm/core';
 import { Router } from '@angular/router';
 import { } from 'googlemaps';
-import { CommonServiceService } from '../../common-service.service';
-import { SearchService } from '../../core/search.service';
+
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
@@ -46,7 +45,7 @@ export class SearchFormComponent implements OnInit {
      // end of declarations
 
      constructor(private mapsAPILoader: MapsAPILoader,
-      private ngZone: NgZone,public ss:SearchService, public router:Router) { }
+      private ngZone: NgZone, public router:Router) { }
 
   ngOnInit() {
     this.searchControl = new FormControl();

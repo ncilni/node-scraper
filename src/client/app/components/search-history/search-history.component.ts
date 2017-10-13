@@ -5,7 +5,6 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 // import { Router, ActivatedRoute, Params, ParamMap  } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
-import { CommonServiceService } from '../../common-service.service';
 import { SearchService } from '../../core/search.service';
 
 

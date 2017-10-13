@@ -13,7 +13,6 @@ import { SearchHistoryComponent } from './components/search-history/search-histo
 import { CoreModule } from './core/core.module';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { ExporterComponent } from './components/exporter/exporter.component';
-import { CommonServiceService } from "./common-service.service";
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ResultCardComponent } from './components/result-card/result-card.component';
@@ -45,7 +44,7 @@ import { CsvService } from "angular2-json2csv";
     ReactiveFormsModule,
     CoreModule
   ],
-  providers: [CommonServiceService, CsvService],
+  providers: [CsvService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
