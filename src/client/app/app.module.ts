@@ -18,6 +18,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ResultCardComponent } from './components/result-card/result-card.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CsvService } from "angular2-json2csv";
+import { Logger } from "angular2-logger/core";
 
 
 
@@ -44,7 +45,7 @@ import { CsvService } from "angular2-json2csv";
     ReactiveFormsModule,
     CoreModule
   ],
-  providers: [CsvService],
+  providers: [CsvService, Logger],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

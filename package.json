@@ -29,6 +29,7 @@
     "@types/jquery": "^3.2.12",
     "angular-2-data-table": "^0.1.2",
     "angular2-json2csv": "^1.1.2",
+    "angular2-logger": "^0.6.0",
     "async": "^2.5.0",
     "bootstrap": "^3.3.7",
     "cheerio": "^1.0.0-rc.2",
