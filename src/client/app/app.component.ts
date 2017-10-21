@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, OnInit } from '@angular/core';
 import { TestService } from './core/test.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-root',
@@ -7,21 +8,11 @@ import { TestService } from './core/test.service';
   styleUrls: ['./app.component.css'],
   providers: [TestService]
 })
-export class AppComponent {
-  title = 'app';
-  testServerData;
-  constructor(
-      private testService: TestService,
-  ) {}
-
-  testServer() {
-    this.testService.testRequest()
-        .then(data => {
-          this.testServerData = data._body;
-          console.log('data', this.testServerData);
-        })
-        .catch(error => {
-            this.testServerData = 'ERROR';
-        })
+export class AppComponent implements OnInit {
+  
+    constructor() { }
+  
+    ngOnInit() {
+    }
+  
   }
-}
