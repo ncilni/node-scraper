@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "startAngular": "ng serve --proxy-config proxy.config.json --watch",
+    "startAngular": "ng serve --proxy-config proxy.config.json --watch --port 3000",
     "startExpress": "nodemon bin/www",
     "start": "concurrently --kill-others-on-fail \"npm run startExpress\" \"npm run startAngular\"",
     "build": "ng build",
@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
+    "@ngrx/core": "^1.2.0",
     "@swimlane/ngx-datatable": "^10.2.0",
     "@types/bootstrap": "^3.3.36",
     "@types/jquery": "^3.2.12",

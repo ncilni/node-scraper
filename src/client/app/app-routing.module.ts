@@ -1,5 +1,5 @@
-import { NgModule }              from '@angular/core';
-import { RouterModule, Routes }  from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';

@@ -156,6 +156,7 @@ exports.searchYelp=function(req,res){
                   }
                 });              
             }
+          })
         }
     
 
