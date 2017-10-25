@@ -1,7 +1,3 @@
-  
-        <div class="tagline-upper text-center text-heading text-shadow text-white mt-5 d-none d-lg-block"><img src="../assets/images/logowhitefull.png" class="img-fluid" alt="Responsive image"></div>
-        <div class="tagline-lower text-center text-expanded text-shadow text-white mb-5 d-none d-lg-block"><h2><strong>List</strong>Builder</h2></div>
-    
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-light bg-faded py-lg-4">
           <div class="container">
@@ -12,15 +8,15 @@
             <div class="navbar-collapse collapse" id="navbarResponsive" style="">
               <ul class="navbar-nav mx-auto">
                 <li class="nav-item px-lg-4">
-                  <a class="nav-link text-uppercase text-expanded" routerLink="/search" routerLinkActive="active">Search
+                  <a class="nav-link text-uppercase text-expanded" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">Search
                     
                   </a>
                 </li>
                 <li class="nav-item px-lg-4">
-                  <a class="nav-link text-uppercase text-expanded" routerLink="/history" routerLinkActive="active">Search History</a>
+                  <a class="nav-link text-uppercase text-expanded" [routerLink]="['/app' , {outlets: {'home': ['history']}}]" routerLinkActive="active">Search History</a>
                 </li>
                 <li class="nav-item px-lg-4">
-                  <a class="nav-link text-uppercase text-expanded" routerLink="/export" routerLinkActive="active"><b>Export Data</b></a>
+                  <a class="nav-link text-uppercase text-expanded" [routerLink]="['/app', {outlets: {'home': ['export']}}]" routerLinkActive="active"><b>Export Data</b></a>
                 </li>
               </ul>
             </div>
@@ -28,20 +24,10 @@
         </nav>
     
         <div class="container-fluid">
-            <router-outlet></router-outlet>
+            <router-outlet name="home"></router-outlet>
           
         </div>
-        <!-- /.container -->
-       
-        <footer class="bg-faded text-center">
-          
-            <p class="cv">Copyright © JumpCrew 2017</p>
-          
-        </footer>
-        
-        <!-- Bootstrap core JavaScript -->
      
-    
       
     
     

@@ -6,25 +6,31 @@ import { SearchResultComponent } from './components/search-result/search-result.
 import { SearchHistoryComponent } from './components/search-history/search-history.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { ExporterComponent } from './components/exporter/exporter.component';
+import { LoginComponentComponent } from './components/login-component/login-component.component';
 
 
 
 const appRoutes: Routes = [
-    { path: 'history', component: SearchHistoryComponent },
-    { path: 'result'  , component: SearchResultComponent },
+  { path: 'login', component: LoginComponentComponent },
+  { path: 'app', component:AppComponent , children:[
+    { path: 'history', component: SearchHistoryComponent, outlet:'home' },
+    { path: 'result'  , component: SearchResultComponent ,outlet:'home'},
     {
       path: 'search',
-      component: SearchFormComponent
+      component: SearchFormComponent,
+      outlet:'home'
     },
     {
       path: 'export',
-      component: ExporterComponent
-    },
+      component: ExporterComponent,
+      outlet:'home'
+    }]},
     { path: '',
-      redirectTo: '/search',
-      pathMatch: 'full'
+      redirectTo: '/login',
+      pathMatch: 'full',
     },
     { path: '**', component: PageNotFoundComponent }
+  
   ];
 
 @NgModule({

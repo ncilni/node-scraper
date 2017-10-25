@@ -10,7 +10,7 @@
 
  body {
     font-family: "Times", Helvetica, Arial, sans-serif !important;
-    background-color: #36537b;    
+    background-color: #36537b !important;    
   }
   
   h1, h2, h3, h4, h5, h6, .text-heading {
