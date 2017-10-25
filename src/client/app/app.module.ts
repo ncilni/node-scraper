@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { AppBootstrapModule } from './app-bootstrap.module';
 import { FormsModule,  ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { AgmCoreModule } from '@agm/core';
@@ -19,19 +19,33 @@ import { ResultCardComponent } from './components/result-card/result-card.compon
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CsvService } from "angular2-json2csv";
 import { Logger } from "angular2-logger/core";
-import { LoginComponentComponent } from './components/login-component/login-component.component';
-import { AppBootstrapImports, AppBootstrapDeclaration } from './app-bootstrap-constants';
-import { MainSkinComponent } from './skin/main-skin/main-skin.component';
 
 
 
 @NgModule({
   declarations: [
-    ...AppBootstrapDeclaration,
-    MainSkinComponent
+    AppComponent,
+    SearchResultComponent,
+    SearchHistoryComponent,
+    SearchFormComponent,
+    PageNotFoundComponent,
+    ExporterComponent,
+    DataTableComponent,
+    ResultCardComponent
   ],
-  imports: [...AppBootstrapImports],
+  imports: [
+    AppRoutingModule, NgxDatatableModule, AgmCoreModule.forRoot({
+      apiKey: "AIzaSyBKJ4uoOaIJc53W4jBxUBZGBJQrCLk_hyo",
+      libraries: ["places"],region:'US'     
+    }),
+    BrowserModule,
+    Ng2SmartTableModule,
+    AppBootstrapModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CoreModule
+  ],
   providers: [CsvService, Logger],
-  bootstrap: [MainSkinComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
