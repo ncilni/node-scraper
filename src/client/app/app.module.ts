@@ -28,7 +28,6 @@ import { MainSkinComponent } from './skin/main-skin/main-skin.component';
 @NgModule({
   declarations: [
     ...AppBootstrapDeclaration,
-    MainSkinComponent
   ],
   imports: [...AppBootstrapImports],
   providers: [CsvService, Logger],
