@@ -1,23 +1,26 @@
-<div class="login">
-  <div class="login-screen">
-    <div class="app-title">
-      <h1>Login</h1>
+<div class="container">
+<div class="card">
+    <div class="card-header">
+      <h4>JumpCrew Login</h4>
     </div>
-
-    <div class="login-form">
-      <div class="control-group">
-      <input type="text" class="login-field" value="" placeholder="username" id="login-name">
-      <label class="login-field-icon fui-user" for="login-name"></label>
-      </div>
-
-      <div class="control-group">
-      <input type="password" class="login-field" value="" placeholder="password" id="login-pass">
-      <label class="login-field-icon fui-lock" for="login-pass"></label>
-      </div>
-
-      <button class="btn btn-primary btn-large btn-block" (click)="login()">login</button>
-      <!-- future use -->
-      <!-- <a class="login-link" href="#">Lost your password?</a> -->
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+        </form>  
+    </div>
+    <div class="card-footer">
+        <div class="alert alert-danger" role="alert">
+            Invalid Credentials! 
+          </div>
+        <span>
+            <button class="btn btn-primary btn-lg" type="submit"  (click)="login()">Login</button>
+          </span>
     </div>
   </div>
 </div>
