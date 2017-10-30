@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var search = require('./routes/Search'); 
 var history = require('./routes/history');
+var authentication = require('./routes/authentication');
 var app = express();
 
 // view engine setup
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', index);
+app.use('api/login', authentication);
 app.use('/api/search', search);
 app.use('/api/history', history);
 
