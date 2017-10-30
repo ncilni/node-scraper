@@ -3,11 +3,7 @@
   "project": {
     "name": "JumpCrew-Scraper"
   },
-  "defaults": {
-    "serve": {
-      "port": 3000
-    }
-  },
+ 
   "apps": [
     {
       "root": "src/client",

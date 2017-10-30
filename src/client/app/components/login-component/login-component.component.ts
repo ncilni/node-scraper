@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from '../../core/auth.service';
+import { AlertService } from '../../core/alert.service';
 
 @Component({
   selector: 'app-login-component',
@@ -8,13 +10,34 @@ import { Router } from '@angular/router';
 })
 export class LoginComponentComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  model: any = {};
+  loading = false;
+  returnUrl: string;
+
+  constructor(
+      private route: ActivatedRoute,
+      private router: Router,
+      private authenticationService: AuthenticationService,
+      private alertService: AlertService) { }
 
   ngOnInit() {
+      // reset login status
+      this.authenticationService.logout();
+
+      // get return url from route parameters or default to '/'
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  login(){
-    console.log('hello');
-    this.router.navigate(['/app']);
+  login() {
+      this.loading = true;
+      this.authenticationService.login(this.model.username, this.model.password)
+          .subscribe(
+              data => {
+                  this.router.navigate([this.returnUrl]);
+              },
+              error => {
+                  this.alertService.error(error);
+                  this.loading = false;
+              });
   }
 }

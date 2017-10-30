@@ -20,6 +20,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
+import { MainSkinComponent } from './skin/main-skin/main-skin.component';
 
 // @NgModule({
 //   imports: [
@@ -53,5 +54,6 @@ export const AppBootstrapDeclaration = [
   ExporterComponent,
   DataTableComponent,
   ResultCardComponent,
-  LoginComponentComponent
+  LoginComponentComponent,
+  MainSkinComponent
 ]

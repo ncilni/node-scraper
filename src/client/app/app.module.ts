@@ -22,16 +22,20 @@ import { Logger } from "angular2-logger/core";
 import { LoginComponentComponent } from './components/login-component/login-component.component';
 import { AppBootstrapImports, AppBootstrapDeclaration } from './app-bootstrap-constants';
 import { MainSkinComponent } from './skin/main-skin/main-skin.component';
+import { AlertComponent } from './components/_directives/alert/alert.component';
+import { AuthenticationService } from './core/auth.service';
+import { AlertService } from './core/alert.service';
+import { AuthGuard } from './_guards/auth.guard';
 
 
 
 @NgModule({
   declarations: [
     ...AppBootstrapDeclaration,
-    MainSkinComponent
+    AlertComponent,
   ],
   imports: [...AppBootstrapImports],
-  providers: [CsvService, Logger],
+  providers: [CsvService, Logger,AuthGuard,AuthenticationService,AlertService],
   bootstrap: [MainSkinComponent]
 })
 export class AppModule { }
