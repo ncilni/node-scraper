@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var path = require('path');
-var search = require('./Scrapingroutes');
+var search = require('./Scraperoutes');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
   var directory= req.query.directory;
   switch(directory){
     case "yelp": 
-      search.searchyelp(req, res);
+      search.searchYelp(req, res);
       break;
     case "yp":
       search.searchyp(req, res);
