@@ -25,45 +25,63 @@ var connection = mysql.createConnection({
   
 
 router.get('/', function (req, res) {
-        var query="SELECT * FROM search_history";
-        connection.query(query,function(error, newresults, fields){
+  console.log(req.headers.username);
+        var query="SELECT * FROM users where username= '"+req.headers.username+"' and password='"+req.headers.password+"'";
+        connection.query(query,function(error, results, fields){
           if(error) {
             res.send({
               "code":500,
               "Failure":"Internal Server Error"
                 });
             }else{
-              console.log(newresults);
-              res.send({
+                console.log(results);
+                res.send({
                 "code":200,
-                "success":"Records from db",
-                "result":newresults
-                  });
+                "message":"User retrieved",
+                "result":results,
+                  });              
             }
           });              
       });
 
 router.post('/register', function (req, res) {
-var query="SELECT * FROM search_history";
-connection.query(query,function(error, newresults, fields){
-    if(error) {
-    res.send({
-        "code":500,
-        "Failure":"Internal Server Error"
-        });
-    }else{
-        console.log(newresults);
+    var values=[];
+    values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
+    console.log('values',values);
+    connection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
+      if(error) {
         res.send({
-        "code":200,
-        "success":"Records from db",
-        "result":newresults
+          "code":500,
+          "Failure":"Internal Server Error"
             });
-    }
-    });              
+        }else{
+          console.log('results',results);
+            if(results.length==0){
+              connection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
+                if(error) {
+                res.send({
+                    "code":500,
+                    "Failure":"Internal Server Error"   
+                    });
+                }else{
+                    console.log(newresults);
+                    res.send({
+                    "code":200,
+                    "message":"User Created"
+                        });
+                }
+            });   
+            } else{
+              res.send({
+                "code":205,
+                "message":"Username already exists"
+                    });
+            }      
+        }
+      });              
+
+
+          
 });
 
-
-
-
-  
   module.exports = router;

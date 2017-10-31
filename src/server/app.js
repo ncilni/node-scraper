@@ -8,12 +8,12 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var search = require('./routes/Search'); 
 var history = require('./routes/history');
-var authentication = require('./routes/authentication');
+var authentication = require('./routes/Authentication');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'views'));
+   app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', index);
-app.use('api/login', authentication);
+app.use('/api/authenticate', authentication);
 app.use('/api/search', search);
 app.use('/api/history', history);
 
