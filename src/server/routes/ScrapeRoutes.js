@@ -78,24 +78,7 @@ function scrapeYelp(query){
           }
           else
             console.log('results',result);
-            if(result.length==0){            
-                // connection.query('SELECT searchId FROM search_history ORDER BY searchId DESC LIMIT 1 ',function (error, result, fields){
-                // if(error) {
-                //   console.log("error occurred",error);
-                //   }else{
-                //     console.log(result);
-                //     searchId=result[0].searchId + 1;
-
-                //   }
-                // });
-                // connection.query('SELECT result_id  FROM search_results ORDER BY result_id DESC LIMIT 1 ',function (error, result, fields){
-                //   if(error) {
-                //     console.log("error occurred",error);
-                //     }else{
-                //       console.log('result',result);
-                //       resultId=result[0].result_id;
-                //     }
-                //   });
+            if(result.length==0){
               var values=[];
               var jsonvalues=[];
               var today = new Date();
@@ -124,46 +107,19 @@ function scrapeYelp(query){
                 'page':1
               }
               scrapeYelp(firstQuery);
-
-            //   for (var i = 2; i<=10; i++) {
-            //     (function(i) {
-            //       var query={
-            //         'industry':req.query.industry,
-            //         'location': req.query.location,
-            //         'page':i
-            //       }
-            //         setInterval(function() {
-            //             console.log(i);
-            //         }, 5000)
-            //     })(i);
-            // }
-
-            for (var i = 2; i <= 10; i++) {
-              (function (i) {
-                setTimeout(function () {
-                  var query={
-                            'industry':req.query.industry,
-                            'location': req.query.location,
-                            'page':i
-                          }
-                  console.log(query);
-                 }, 10000*i);
-                })(i);
-               };
-
-            //   for(var i=2; i<=10; i++){
-            //   var query={
-            //       'industry':req.query.industry,
-            //       'location': req.query.location,
-            //       'page':i,
-            //       'searchId':searchId,
-            //       'resultId':resultId
-            //     }
-            //   setInterval(function(){
-            //     console.log(i);
-            //   },5000);
-            // }
-        }else{
+              for (var i = 2; i <= 10; i++) {
+                (function (i) {
+                  setTimeout(function () {
+                    var query={
+                              'industry':req.query.industry,
+                              'location': req.query.location,
+                              'page':i
+                            }
+                    scrapeYelp(query);
+                  }, 10000*i);
+                  })(i);
+                };
+             }else{
                 var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
                 connection.query(query,function(error, newresults, fields){
                   if(error) {
