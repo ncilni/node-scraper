@@ -24,10 +24,10 @@ var connection = mysql.createConnection({
   });
   
 
-router.get('/', function (req, res) {
+router.post('/', function (req, res) {
   console.log('user headers', req.headers);
-  console.log(req.headers.username);
-        var query="SELECT * FROM users where username= '"+req.headers.username+"' and password='"+req.headers.password+"'";
+  console.log(req.body.username);
+        var query="SELECT * FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         connection.query(query,function(error, results, fields){
           if(error) {
             res.send({
