@@ -5,10 +5,14 @@ import 'rxjs/add/operator/map'
  
 @Injectable()
 export class AuthenticationService {
+    
     constructor(private http: Http) { }
  
     login(username: string, password: string) {
-        return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
+        let reqHeaders =  new Headers();
+        reqHeaders.append('username', username);
+        reqHeaders.append('password', password);
+        return this.http.get('http://localhost:8020/api/authenticate', { headers : reqHeaders})
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();

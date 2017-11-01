@@ -25,6 +25,7 @@ var connection = mysql.createConnection({
   
 
 router.get('/', function (req, res) {
+  console.log('user headers', req.headers);
   console.log(req.headers.username);
         var query="SELECT * FROM users where username= '"+req.headers.username+"' and password='"+req.headers.password+"'";
         connection.query(query,function(error, results, fields){
@@ -34,12 +35,20 @@ router.get('/', function (req, res) {
               "Failure":"Internal Server Error"
                 });
             }else{
-                console.log(results);
+              if(results.length==0){
+                console.log('result',results);
                 res.send({
-                "code":200,
-                "message":"User retrieved",
-                "result":results,
-                  });              
+                "code":205,
+                "message":"User Doesn't exist",
+                  });  
+                }else{
+                  console.log(results);
+                  res.send({
+                  "code":200,
+                  "message":"User retrieved",
+                  "result":results
+                    }); 
+                }            
             }
           });              
       });
