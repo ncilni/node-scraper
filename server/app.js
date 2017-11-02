@@ -11,6 +11,8 @@ var history = require('./routes/history');
 var authentication = require('./routes/Authentication');
 var app = express();
 var router = express.Router();
+var _PORT = 8020;
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -53,4 +55,5 @@ app.use(function(err, req, res, next) {
 });
 
 app.use('/api', router);
-app.listen(8020);
+app.listen(_PORT);
+console.log("Server Started : ", _PORT);
