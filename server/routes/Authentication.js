@@ -38,11 +38,11 @@ router.post('/', function (req, res,body) {
                 });
             }else{
               if(results.length==0){
-                console.log('result',results);
-                res.sendStatus(404);
+                console.log('result : ',results);
+                res.status(401);
                 res.send({
-                "code":404,
-                "message":"User Doesn't exist",
+                "code":401,
+                "message":"Unauthorized Access",
                   });  
                 }else{
                   console.log(results);
@@ -63,13 +63,7 @@ router.post('/register', function (req, res) {
     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
     console.log('values',values);
     connection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
-      if(error) {
-        res.sendStatus(500);
-        res.send({
-          "code":500,
-          "Failure":"Internal Server Error"
-            });
-        }else{
+      if(!error) {
           console.log('results',results);
             if(results.length==0){
               connection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
@@ -80,7 +74,7 @@ router.post('/register', function (req, res) {
                     "Failure":"Internal Server Error"   
                     });
                 }else{
-                    console.log(newresults);
+                    console.log("Send Status : ", newresults, "End");
                     res.sendStatus(200);
                     res.send({
                     "code":200,
@@ -96,10 +90,14 @@ router.post('/register', function (req, res) {
                     });
             }      
         }
+        else{
+          res.sendStatus(500);
+          res.send({
+            "code":500,
+            "Failure":"Internal Server Error"
+          });
+        }
       });              
-
-
-          
-});
+   });
 
   module.exports = router;
