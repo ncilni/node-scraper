@@ -28,7 +28,7 @@ router.post('/', function (req, res,body) {
   console.log('user headers', req.headers);
   //passkey = window.atob(req.body.password);
   console.log(req.body, 'passkey');
-        var query="SELECT * FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
+        var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         connection.query(query,function(error, results, fields){
           if(error) {
             res.send({
