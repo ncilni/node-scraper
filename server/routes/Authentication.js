@@ -31,6 +31,7 @@ router.post('/', function (req, res,body) {
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         connection.query(query,function(error, results, fields){
           if(error) {
+            res.sendStatus(500);
             res.send({
               "code":500,
               "Failure":"Internal Server Error"
@@ -38,13 +39,14 @@ router.post('/', function (req, res,body) {
             }else{
               if(results.length==0){
                 console.log('result',results);
+                res.sendStatus(404);
                 res.send({
-                "code":205,
+                "code":404,
                 "message":"User Doesn't exist",
                   });  
                 }else{
                   console.log(results);
-
+                  res.sendStatus(200);
                   res.send({
                   "code":200,
                   "message":"User retrieved",
@@ -62,6 +64,7 @@ router.post('/register', function (req, res) {
     console.log('values',values);
     connection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
       if(error) {
+        res.sendStatus(500);
         res.send({
           "code":500,
           "Failure":"Internal Server Error"
@@ -71,12 +74,14 @@ router.post('/register', function (req, res) {
             if(results.length==0){
               connection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
                 if(error) {
+                res.sendStatus(500);
                 res.send({
                     "code":500,
                     "Failure":"Internal Server Error"   
                     });
                 }else{
                     console.log(newresults);
+                    res.sendStatus(200);
                     res.send({
                     "code":200,
                     "message":"User Created"
@@ -84,8 +89,9 @@ router.post('/register', function (req, res) {
                 }
             });   
             } else{
+              res.sendStatus(422);
               res.send({
-                "code":205,
+                "code":422,
                 "message":"Username already exists"
                     });
             }      
