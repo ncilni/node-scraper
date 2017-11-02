@@ -46,7 +46,7 @@ router.post('/', function (req, res,body) {
                   });  
                 }else{
                   console.log(results);
-                  res.sendStatus(200);
+                  res.status(200);
                   res.send({
                   "code":200,
                   "status":"User Authorized",
