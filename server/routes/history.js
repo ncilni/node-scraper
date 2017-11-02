@@ -28,12 +28,14 @@ router.get('/', function (req, res) {
         var query="SELECT * FROM search_history";
         connection.query(query,function(error, newresults, fields){
           if(error) {
+            res.status(500);
             res.send({
               "code":500,
               "Failure":"Internal Server Error"
                 });
             }else{
               console.log(newresults);
+              res.status(200);
               res.send({
                 "code":200,
                 "success":"Records from db",
@@ -48,12 +50,14 @@ router.get('/results', function (req, res) {
   console.log('query', query);
   connection.query(query,function(error, newresults, fields){
     if(error) {
+      res.status(500);
       res.send({
         "code":500,
         "Failure":"Internal Server Error"
           });
       }else{
         // console.log(newresults);
+        res.status(200);
         res.send({
           "code":200,
           "success":"Records from db",
@@ -71,12 +75,14 @@ router.get('/results', function (req, res) {
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
     connection.query(query,function(error, newresults, fields){
       if(error) {
+        res.status(500);
         res.send({
           "code":500,
           "Failure":"Internal Server Error"
             });
         }else{
-          console.log(newresults);
+          // console.log(newresults);
+          res.status(200);
           res.send({
             "code":200,
             "success":"Records from db",
@@ -96,12 +102,14 @@ router.get('/results', function (req, res) {
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
     connection.query(query,function(error, newresults, fields){
       if(error) {
+        res.status(500);
         res.send({
           "code":500,
           "Failure":"Internal Server Error"
             });
         }else{
           console.log(newresults);
+          res.status(200);
           res.send({
             "code":200,
             "success":"Records from db",

@@ -31,7 +31,7 @@ router.post('/', function (req, res,body) {
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         connection.query(query,function(error, results, fields){
           if(error) {
-            res.sendStatus(500);
+            res.status(500);
             res.send({
               "code":500,
               "Failure":"Internal Server Error"
@@ -68,14 +68,14 @@ router.post('/register', function (req, res) {
             if(results.length==0){
               connection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
                 if(error) {
-                res.sendStatus(500);
+                res.status(500);
                 res.send({
                     "code":500,
                     "Failure":"Internal Server Error"   
                     });
                 }else{
                     console.log("Send Status : ", newresults, "End");
-                    res.sendStatus(200);
+                    res.status(200);
                     res.send({
                     "code":200,
                     "message":"User Created"
@@ -83,7 +83,7 @@ router.post('/register', function (req, res) {
                 }
             });   
             } else{
-              res.sendStatus(422);
+              res.status(422);
               res.send({
                 "code":422,
                 "message":"Username already exists"
@@ -91,7 +91,7 @@ router.post('/register', function (req, res) {
             }      
         }
         else{
-          res.sendStatus(500);
+          res.status(500);
           res.send({
             "code":500,
             "Failure":"Internal Server Error"
