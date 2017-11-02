@@ -25,11 +25,6 @@ var connection = mysql.createConnection({
   
 
 router.post('/', function (req, res,body) {
-  res.header("Access-Control-Allow-Origin", "YOUR_URL"); // restrict it to the required domain
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  // Set custom headers for CORS
-  res.header("Access-Control-Allow-Headers", "Content-type,Accept,X-Custom-Header");
-
   console.log('user headers', req.headers);
   //passkey = window.atob(req.body.password);
   console.log(req.body, 'passkey');
@@ -61,10 +56,6 @@ router.post('/', function (req, res,body) {
       });
 
 router.post('/register', function (req, res) {
-  res.header("Access-Control-Allow-Origin", "YOUR_URL"); // restrict it to the required domain
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  // Set custom headers for CORS
-  res.header("Access-Control-Allow-Headers", "Content-type,Accept,X-Custom-Header");
 
     var values=[];
     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
