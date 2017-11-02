@@ -26,6 +26,7 @@ import { AlertComponent } from './components/_directives/alert/alert.component';
 import { AuthenticationService } from './core/auth.service';
 import { AlertService } from './core/alert.service';
 import { AuthGuard } from './_guards/auth.guard';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 
 
@@ -33,6 +34,7 @@ import { AuthGuard } from './_guards/auth.guard';
   declarations: [
     ...AppBootstrapDeclaration,
     AlertComponent,
+    AdminPanelComponent,
   ],
   imports: [...AppBootstrapImports],
   providers: [CsvService, Logger,AuthGuard,AuthenticationService,AlertService],
