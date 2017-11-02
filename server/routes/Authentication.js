@@ -9,17 +9,17 @@ app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-var connection = mysql.createConnection({
+var databaseConnection = mysql.createConnection({
     host     : 'mysql.intelegencia.com',
     user     : 'user_listbuilder',
     password : 'intel@01',
     database : 'list_builder'
   });
-  connection.connect(function(err){
+  databaseConnection.connect(function(err){
   if(!err) {
-    //   console.log("Database is connected ... nn");
+      console.log("Connected to Database :", databaseConnection.host);
   } else {
-      console.log("Error connecting database ... nn");
+      console.log("Unable to connect to Database ");
   }
   });
   
@@ -29,12 +29,12 @@ router.post('/', function (req, res,body) {
   //passkey = window.atob(req.body.password);
   console.log(req.body, 'passkey');
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
-        connection.query(query,function(error, results, fields){
+        databaseConnection.query(query,function(error, results, fields){
           if(error) {
             res.status(500);
             res.send({
               "code":500,
-              "Failure":"Internal Server Error"
+              "status":"Internal Server Error"
                 });
             }else{
               if(results.length==0){
@@ -42,14 +42,14 @@ router.post('/', function (req, res,body) {
                 res.status(401);
                 res.send({
                 "code":401,
-                "message":"Unauthorized Access",
+                "status":"Unauthorized Access",
                   });  
                 }else{
                   console.log(results);
                   res.sendStatus(200);
                   res.send({
                   "code":200,
-                  "message":"User retrieved",
+                  "status":"User Authorized",
                   "result":results
                     }); 
                 }            
@@ -62,31 +62,31 @@ router.post('/register', function (req, res) {
     var values=[];
     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
     console.log('values',values);
-    connection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
+    databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
       if(!error) {
           console.log('results',results);
             if(results.length==0){
-              connection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
+              databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
                 if(error) {
                 res.status(500);
                 res.send({
                     "code":500,
-                    "Failure":"Internal Server Error"   
+                    "status":"Internal Server Error"   
                     });
                 }else{
                     console.log("Send Status : ", newresults, "End");
-                    res.status(200);
+                    res.status(201);
                     res.send({
-                    "code":200,
-                    "message":"User Created"
-                        });
+                    "code":201,
+                    "status":"User Created"
+                    });
                 }
             });   
             } else{
-              res.status(422);
+              res.status(400);
               res.send({
-                "code":422,
-                "message":"Username already exists"
+                "code":400,
+                "status":"User already exists"
                     });
             }      
         }
@@ -94,7 +94,7 @@ router.post('/register', function (req, res) {
           res.status(500);
           res.send({
             "code":500,
-            "Failure":"Internal Server Error"
+            "status":"Internal Server Error"
           });
         }
       });              

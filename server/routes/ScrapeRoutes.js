@@ -5,23 +5,20 @@ var path = require('path');
 var mysql = require('mysql');
 var Xray = require('x-ray');
 var x = Xray();
-var connection = mysql.createConnection({
+var databaseConnection = mysql.createConnection({
   host     : 'mysql.intelegencia.com',
   user     : 'user_listbuilder',
   password : 'intel@01',
   database : 'list_builder'
 });
-connection.connect(function(err){
+databaseConnection.connect(function(err){
 if(!err) {
-    console.log("Database is connected ... nn");
-} else {
-    console.log("Error connecting database ... nn");
-}
+  console.log("Connected to Database :", databaseConnection.host);
+  } else {
+  console.log("Unable to connect to Database ");
+  }
 });
 
-function insertRecords(data){
-  
-}
 
 function scrapeYelp(query){
   console.log('inside scrapeYelp function');
@@ -49,20 +46,17 @@ function scrapeYelp(query){
       }
       setTimeout(function(){
         console.log(values);
-        connection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
+        databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
           if(err) {
-            console.log('DB Error');          
+            console.log('Database Error');          
           }
           else {
-            console.log('Successfully entered into the DB');
+            console.log('Successfully inserted to Database');
           }
           });
       
       },3000);
-      // console.log('values', values);
-      // console.log('json', jsonvalues);
-
-        });
+      });
   
   }
 
@@ -92,7 +86,7 @@ function scrapeYelp(query){
         }
         setTimeout(function(){
           console.log(values);
-          connection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
+          databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
             if(err) {
               console.log('DB Error');          
             }
@@ -134,7 +128,7 @@ function scrapeYelp(query){
           }
           setTimeout(function(){
             console.log(values);
-            connection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
+            databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
               if(err) {
                 console.log('DB Error');          
               }
@@ -154,7 +148,7 @@ function scrapeYelp(query){
   exports.searchYelp=function(req,res){
     // var start=(page-1)*10;
    
-    connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
+    databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
       if(error) {
         res.send({
           "code":500,
@@ -175,7 +169,7 @@ function scrapeYelp(query){
                 "search_directory":'Yelp',
                 "date":today              
               };
-              connection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
+              databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
               if(error) {
                 console.log("error ocurred",error);
                 res.send({
@@ -206,7 +200,7 @@ function scrapeYelp(query){
                 };
              }else{
                 var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
-                connection.query(query,function(error, newresults, fields){
+                databaseConnection.query(query,function(error, newresults, fields){
                   if(error) {
                     res.send({
                       "code":500,
@@ -228,7 +222,7 @@ function scrapeYelp(query){
         exports.searchYp=function(req,res){
           // var start=(page-1)*10;
          
-          connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
+          databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
             if(error) {
               res.send({
                 "code":500,
@@ -249,7 +243,7 @@ function scrapeYelp(query){
                       "search_directory":'Yelp',
                       "date":today              
                     };
-                    connection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
+                    databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
                     if(error) {
                       console.log("error ocurred",error);
                       res.send({
@@ -280,7 +274,7 @@ function scrapeYelp(query){
                       };
                    }else{
                       var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
-                      connection.query(query,function(error, newresults, fields){
+                      databaseConnection.query(query,function(error, newresults, fields){
                         if(error) {
                           res.send({
                             "code":500,
@@ -303,7 +297,7 @@ function scrapeYelp(query){
               exports.searchManta=function(req,res){
                 // var start=(page-1)*10;
                
-                connection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
+                databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
                   if(error) {
                     res.send({
                       "code":500,
@@ -324,7 +318,7 @@ function scrapeYelp(query){
                             "search_directory":'Yelp',
                             "date":today              
                           };
-                          connection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
+                          databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
                           if(error) {
                             console.log("error ocurred",error);
                             res.send({
@@ -355,7 +349,7 @@ function scrapeYelp(query){
                             };
                          }else{
                             var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
-                            connection.query(query,function(error, newresults, fields){
+                            databaseConnection.query(query,function(error, newresults, fields){
                               if(error) {
                                 res.send({
                                   "code":500,

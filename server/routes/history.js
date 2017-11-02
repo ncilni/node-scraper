@@ -9,13 +9,13 @@ app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-var connection = mysql.createConnection({
+var databaseConnection = mysql.createConnection({
     host     : 'mysql.intelegencia.com',
     user     : 'user_listbuilder',
     password : 'intel@01',
     database : 'list_builder'
   });
-  connection.connect(function(err){
+  databaseConnection.connect(function(err){
   if(!err) {
     //   console.log("Database is connected ... nn");
   } else {
@@ -26,21 +26,21 @@ var connection = mysql.createConnection({
 
 router.get('/', function (req, res) {
         var query="SELECT * FROM search_history";
-        connection.query(query,function(error, newresults, fields){
+        databaseConnection.query(query,function(error, newresults, fields){
           if(error) {
             res.status(500);
             res.send({
               "code":500,
-              "Failure":"Internal Server Error"
+              "status":"Internal Server Error"
                 });
             }else{
               console.log(newresults);
               res.status(200);
               res.send({
                 "code":200,
-                "success":"Records from db",
+                "status":"Success",
                 "result":newresults
-                  });
+                });
             }
           });              
       });
@@ -48,44 +48,39 @@ router.get('/', function (req, res) {
 router.get('/results', function (req, res) {
   var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+"' and industry='"+req.query.industry+"'";
   console.log('query', query);
-  connection.query(query,function(error, newresults, fields){
+  databaseConnection.query(query,function(error, newresults, fields){
     if(error) {
       res.status(500);
       res.send({
         "code":500,
-        "Failure":"Internal Server Error"
+        "status":"Internal Server Error"
           });
       }else{
-        // console.log(newresults);
         res.status(200);
         res.send({
           "code":200,
-          "success":"Records from db",
+          "status":"Success",
           "result":newresults
             });
       }
     });              
 });
-
-
-
-  router.get('/location', function (req, res) {
+router.get('/location', function (req, res) {
     var industry= req.query.industry;
     console.log(industry);
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
-    connection.query(query,function(error, newresults, fields){
+    databaseConnection.query(query,function(error, newresults, fields){
       if(error) {
         res.status(500);
         res.send({
           "code":500,
-          "Failure":"Internal Server Error"
+          "status":"Internal Server Error"
             });
         }else{
-          // console.log(newresults);
           res.status(200);
           res.send({
             "code":200,
-            "success":"Records from db",
+            "status":"Success",
             "result":newresults
               });
         }
@@ -100,7 +95,7 @@ router.get('/results', function (req, res) {
     var location= req.query.location;
     console.log('format requested',format);
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
-    connection.query(query,function(error, newresults, fields){
+    databaseConnection.query(query,function(error, newresults, fields){
       if(error) {
         res.status(500);
         res.send({
