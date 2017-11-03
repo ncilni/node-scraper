@@ -39,12 +39,22 @@ router.get('/', function (req, res) {
                 "status":"Internal Server Error"
                   });
               }else{
-                res.status(200);
-                res.send({
-                  "code":200,
-                  "status":"Success",
-                  "result":newresults
-                  });
+                if(newresults.length==0){
+                  res.status(400);
+                  res.send({
+                    "code":400,
+                    "status":"Bad request ",
+                    "message": "User Does not Exist"
+                    });
+                }else{
+                  res.status(200);
+                  res.send({
+                    "code":200,
+                    "status":"Success",
+                    "result":newresults
+                    });
+                }
+              
               }
             });
         }              
