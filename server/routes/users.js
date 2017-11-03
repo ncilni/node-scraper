@@ -59,5 +59,26 @@ router.get('/', function (req, res) {
             });
         }              
       });
-  
-  module.exports = router;
+      
+router.delete('/', function (req, res) {
+  var userId = req.query.userId;
+        var query="delete FROM users where user_Id="+userId;
+        databaseConnection.query(query,function(error, fields){
+          console.log('response from db',fields);
+          if(error) {
+            res.status(500);
+            res.send({
+              "code":500,
+              "status":"Internal Server Error"
+                });
+              } else{
+                res.status(204);
+                res.send({
+                  "code":204,
+                  "status":"No Content"
+                  });
+              }             
+      });
+});
+
+module.exports = router;
