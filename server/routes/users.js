@@ -10,7 +10,9 @@ app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
 router.get('/', function (req, res) {
-        var query="SELECT * FROM search_history";
+  var listQuery = req.query.list;
+  if (listQuery=='all'){
+        var query="SELECT User_Id, firstname, lastname, username, type FROM users";
         databaseConnection.query(query,function(error, newresults, fields){
           if(error) {
             res.status(500);
@@ -19,7 +21,6 @@ router.get('/', function (req, res) {
               "status":"Internal Server Error"
                 });
             }else{
-              console.log(newresults);
               res.status(200);
               res.send({
                 "code":200,
@@ -27,7 +28,26 @@ router.get('/', function (req, res) {
                 "result":newresults
                 });
             }
-          });              
+          });
+        }else{
+          var query="SELECT User_Id, firstname, lastname, username, type FROM users Where User_Id="+listQuery;
+          databaseConnection.query(query,function(error, newresults, fields){
+            if(error) {
+              res.status(500);
+              res.send({
+                "code":500,
+                "status":"Internal Server Error"
+                  });
+              }else{
+                res.status(200);
+                res.send({
+                  "code":200,
+                  "status":"Success",
+                  "result":newresults
+                  });
+              }
+            });
+        }              
       });
 
 router.get('/results', function (req, res) {

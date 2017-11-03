@@ -4,13 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
-
-
 var search = require('./routes/search'); 
 var history = require('./routes/history');
 var authentication = require('./routes/authentication');
-var user = require('./routes/user');
+var users = require('./routes/users');
 var app = express();
 var router = express.Router();
 var _PORT = 8020;
@@ -31,27 +28,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Creating mysql Database connection
-var databaseConnection = mysql.createConnection({
-  host     : 'mysql.intelegencia.com',
-  user     : 'user_listbuilder',
-  password : 'intel@01',
-  database : 'list_builder'
-});
-databaseConnection.connect(function(err){
-if(!err) {
-  console.log("Connected to Database :", databaseConnection.host);
-  } else {
-  console.log("Unable to connect to Database ");
-  }
-});
 
 
 //app.use('/api', index);
 app.use('/api/authenticate', authentication);
 app.use('/api/search', search);
 app.use('/api/history', history);
-app.use('/api/user', user)
+app.use('/api/users', users)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
