@@ -3,7 +3,7 @@ var router = express.Router();
 var app = express();
 var path = require('path');
 var mysql = require('mysql');
-var databaseConnection = require('./db');
+`var databaseConnection = require('./database');`
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
@@ -14,6 +14,17 @@ router.post('/', function (req, res,body) {
   console.log('user headers', req.headers);
   //passkey = window.atob(req.body.password);
   console.log(req.body, 'passkey');
+  if(req.body={})
+  {
+    res.status(400);
+    res.send({
+      "code":400,
+      "status":"Bad Request - body Not found"
+        });
+
+    console.log( "status : Bad Request - body Not found");
+    return;
+  }
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         databaseConnection.query(query,function(error, results, fields){
           if(error) {
