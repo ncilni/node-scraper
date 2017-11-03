@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var path = require('path');
-var databaseConnection = require('./db');
+var databaseConnection = require('./database');
 
 
 app.use(express.static('/'));

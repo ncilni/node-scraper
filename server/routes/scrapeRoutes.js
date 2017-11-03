@@ -4,7 +4,7 @@ var app = express();
 var path = require('path');
 var Xray = require('x-ray');
 var x = Xray();
-var databaseConnection = require('./db');
+var databaseConnection = require('./database');
 
 function scrapeYelp(query){
   console.log('inside scrapeYelp function');
