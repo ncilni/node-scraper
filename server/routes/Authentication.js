@@ -3,26 +3,12 @@ var router = express.Router();
 var app = express();
 var path = require('path');
 var mysql = require('mysql');
-
+var databaseConnection = require('./db');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-var databaseConnection = mysql.createConnection({
-    host     : 'mysql.intelegencia.com',
-    user     : 'user_listbuilder',
-    password : 'intel@01',
-    database : 'list_builder'
-  });
-  databaseConnection.connect(function(err){
-  if(!err) {
-      console.log("Connected to Database :", databaseConnection.host);
-  } else {
-      console.log("Unable to connect to Database ");
-  }
-  });
-  
 
 router.post('/', function (req, res,body) {
   console.log('user headers', req.headers);

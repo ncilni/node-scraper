@@ -2,23 +2,9 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var path = require('path');
-var mysql = require('mysql');
 var Xray = require('x-ray');
 var x = Xray();
-var databaseConnection = mysql.createConnection({
-  host     : 'mysql.intelegencia.com',
-  user     : 'user_listbuilder',
-  password : 'intel@01',
-  database : 'list_builder'
-});
-databaseConnection.connect(function(err){
-if(!err) {
-  console.log("Connected to Database :", databaseConnection.host);
-  } else {
-  console.log("Unable to connect to Database ");
-  }
-});
-
+var databaseConnection = require('./db');
 
 function scrapeYelp(query){
   console.log('inside scrapeYelp function');
