@@ -4,11 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-//var index = require('./routes/index');
-var search = require('./routes/Search'); 
+var search = require('./routes/search'); 
 var history = require('./routes/history');
-var authentication = require('./routes/Authentication');
+var authentication = require('./routes/authentication');
+var users = require('./routes/users');
 var app = express();
 var router = express.Router();
 var _PORT = 8020;
@@ -20,9 +19,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-   app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -32,10 +28,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 //app.use('/api', index);
 app.use('/api/authenticate', authentication);
 app.use('/api/search', search);
 app.use('/api/history', history);
+app.use('/api/users', users)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,9 +49,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+
 });
 
 app.use('/api', router);
