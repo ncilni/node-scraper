@@ -24,14 +24,12 @@ router.post('/', function (req, res,body) {
                 });
             }else{
               if(results.length==0){
-                console.log('result : ',results);
                 res.status(401);
                 res.send({
                 "code":401,
                 "status":"Unauthorized Access",
                   });  
                 }else{
-                  console.log(results);
                   res.status(200);
                   res.send({
                   "code":200,
