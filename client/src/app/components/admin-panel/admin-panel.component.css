@@ -1,0 +1,33 @@
+.nav{
+    justify-content: center !important;
+    background:#fff;
+}
+
+.align-right{
+    text-align: right;
+}
+.user-list{
+    display: flex;
+    flex-direction: vertical;
+
+}
+.scrollable{
+    /* max-width:100%; */
+    max-height:22rem;
+    background:#eee;
+    overflow-y: scroll; 
+    flex-grow: 0.7;
+
+}
+.user-content{
+    max-width:49%;
+    max-height:22rem;
+    padding-left:4rem;
+}
+.aclass{
+    color:darkblue;
+}
+
+.aclass:active{
+    color:pink;
+}

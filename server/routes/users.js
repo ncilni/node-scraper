@@ -59,5 +59,70 @@ router.get('/', function (req, res) {
             });
         }              
       });
+      
+router.delete('/', function (req, res) {
+  var userId = req.query.userId;
+        var query="delete FROM users where user_Id="+userId;
+        databaseConnection.query(query,function(error, fields){
+          console.log('response from db',fields);
+          if(error) {
+            res.status(500);
+            res.send({
+              "code":500,
+              "status":"Internal Server Error"
+                });
+              } else{
+                res.status(204);
+                res.send({
+                  "code":204,
+                  "status":"No Content"
+                  });
+              }             
+      });
+});
+
+router.put('/', function (req, res) {
+    var values=[];
+    values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
+    console.log('values',values);
+    databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
+      if(!error) {
+          console.log('results',results);
+            if(results.length==0){
+              databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
+                if(error) {
+                res.status(500);
+                res.send({
+                    "code":500,
+                    "status":"Internal Server Error"   
+                    });
+                }else{
+                    console.log("Send Status : ", newresults, "End");
+                    res.status(201);
+                    res.send({
+                    "code":201,
+                    "status":"User Created"
+                    });
+                }
+            });   
+            } else{
+              res.status(400);
+              res.send({
+                "code":400,
+                "status":"User already exists"
+                    });
+            }      
+        }
+        else{
+          res.status(500);
+          res.send({
+            "code":500,
+            "status":"Internal Server Error"
+          });
+        }
+    });              
+});
   
-  module.exports = router;
+
+
+module.exports = router;
