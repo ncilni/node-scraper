@@ -122,7 +122,44 @@ router.put('/', function (req, res) {
         }
     });              
 });
-  
 
+router.post('/', function (req, res) {
+  databaseConnection.query("SELECT * FROM users where user_Id= '"+req.body.userId+"'",function(error, results, fields){
+    if(!error) {
+        console.log('results',results);
+          if(results.length==0){
+            res.status(400);
+            res.send({
+              "code":400,
+              "status":"User Doesn't exist"
+                  });
+          } else{
+            databaseConnection.query("UPDATE list_builder.users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', username='"+req.body.username+"', type="+req.body.type+" Where user_Id="+req.body.userId, function(error, newresults){
+              if(error) {
+              res.status(500);
+              res.send({
+                  "code":500,
+                  "status":"Internal Server Error"   
+                  });
+              }else{
+                  console.log("Send Status : ", newresults, "End");
+                  res.status(200);
+                  res.send({
+                  "code":200,
+                  "status":"Successfully updated"
+                  });
+              }
+          });
+        }
+    }
+      else{
+        res.status(500);
+        res.send({
+          "code":500,
+          "status":"Internal Server Error"
+        });
+      }
+  });              
+});
 
 module.exports = router;
