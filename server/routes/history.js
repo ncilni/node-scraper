@@ -4,7 +4,7 @@ var app = express();
 var path = require('path');
 var mysql = require('mysql');
 var databaseConnection = require('./database');
-
+var appLogger=require('../custom_utils/appLogger');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
               "status":"Internal Server Error"
                 });
             }else{
-              console.log(newresults);
+              appLogger.logger.info(newresults);
               res.status(200);
               res.send({
                 "code":200,
@@ -28,12 +28,12 @@ router.get('/', function (req, res) {
                 "result":newresults
                 });
             }
-          });              
+          });
       });
 
 router.get('/results', function (req, res) {
   var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+"' and industry='"+req.query.industry+"'";
-  console.log('query', query);
+  appLogger.logger.info('query', query);
   databaseConnection.query(query,function(error, newresults, fields){
     if(error) {
       res.status(500);
@@ -49,11 +49,11 @@ router.get('/results', function (req, res) {
           "result":newresults
             });
       }
-    });              
+    });
 });
 router.get('/location', function (req, res) {
     var industry= req.query.industry;
-    console.log(industry);
+    appLogger.logger.info(industry);
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
     databaseConnection.query(query,function(error, newresults, fields){
       if(error) {
@@ -70,7 +70,7 @@ router.get('/location', function (req, res) {
             "result":newresults
               });
         }
-      });              
+      });
   });
 
 
@@ -79,7 +79,7 @@ router.get('/location', function (req, res) {
     var format= req.query.format;
     var industry= req.query.industry;
     var location= req.query.location;
-    console.log('format requested',format);
+    appLogger.logger.info('format requested',format);
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
     databaseConnection.query(query,function(error, newresults, fields){
       if(error) {
@@ -89,7 +89,7 @@ router.get('/location', function (req, res) {
           "Failure":"Internal Server Error"
             });
         }else{
-          console.log(newresults);
+          appLogger.logger.info(newresults);
           res.status(200);
           res.send({
             "code":200,
@@ -97,10 +97,10 @@ router.get('/location', function (req, res) {
             "result":newresults
               });
         }
-      });              
+      });
   });
 
 
 
-  
+
   module.exports = router;

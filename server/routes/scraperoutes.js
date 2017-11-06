@@ -5,9 +5,10 @@ var path = require('path');
 var Xray = require('x-ray');
 var x = Xray();
 var databaseConnection = require('./database');
+var appLogger=require('../custom_utils/appLogger');
 
 function scrapeYelp(query){
-  console.log('inside scrapeYelp function');
+  appLogger.logger.info('Scrape Yelp');
     var industry = query.industry.replace(/ /g,'+');
     var location = query.location.replace(/ /g,'+');
     var page=query.page;
@@ -16,13 +17,13 @@ function scrapeYelp(query){
     var jsonvalues=[];
     var today = new Date();
     var url='https://www.yelp.com/search?find_desc='+industry+'&find_loc='+location+'&start='+start;
-    console.log('page',page,'query:',query,'url:', url);
+    appLogger.logger.info('page',page,'query:',query,'url:', url);
     x(url, 'div.search-result', [{
       business_name:'a.biz-name.js-analytics-click',
       address: 'address',
       phone: 'span.biz-phone'
       }])(function(err, results){
-        console.log('scraped data', results)
+        appLogger.logger.info('scraped data', results)
       for(var i=0; i< results.length; i++){
         var add= results[i].address.replace(/\n        |\n    /g,'');
         var address= add +" ";
@@ -31,13 +32,13 @@ function scrapeYelp(query){
         jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":phn,"website":url, "industry":query.industry, "search_location":query.location });
       }
       setTimeout(function(){
-        console.log(values);
+        appLogger.logger.info(values);
         databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
           if(err) {
-            console.log('Database Error');
+            appLogger.logger.info('Database Error');
           }
           else {
-            console.log('Successfully inserted to Database');
+            appLogger.logger.info('Successfully inserted to Database');
           }
           });
 
@@ -47,7 +48,7 @@ function scrapeYelp(query){
   }
 
 function scrapeYp(query){
-console.log('inside scrapeYp function');
+appLogger.logger.info('inside scrapeYp function');
     var industry = query.industry.replace(/ /g,'+');
     var location = query.location.replace(/ /g,'+');
     var page=query.page;
@@ -56,13 +57,13 @@ console.log('inside scrapeYp function');
     var jsonvalues=[];
     var today = new Date();
     var url='https://www.yellowpages.com/search?find_desc='+industry+'&find_loc='+location+'&start='+start;
-    console.log('page',page,'query:',query,'url:', url);
+    appLogger.logger.info('page',page,'query:',query,'url:', url);
     x(url, 'div.search-result', [{
     business_name:'a.biz-name.js-analytics-click',
     address: 'address',
     phone: 'span.biz-phone'
     }])(function(err, results){
-        console.log('scraped data', results)
+        appLogger.logger.info('scraped data', results)
     for(var i=0; i< results.length; i++){
         var add= results[i].address.replace(/\n        |\n    /g,'');
         var address= add +" ";
@@ -71,13 +72,13 @@ console.log('inside scrapeYp function');
         jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":phn,"website":url, "industry":query.industry, "search_location":query.location });
     }
     setTimeout(function(){
-        console.log(values);
+        appLogger.logger.info(values);
         databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
         if(err) {
-            console.log('DB Error');
+            appLogger.logger.info('Database Error');
         }
         else {
-            console.log('Successfully entered into the DB');
+            appLogger.logger.info('Data Inserted');
         }
         });
 
@@ -90,7 +91,7 @@ console.log('inside scrapeYp function');
 }
 
 function scrapeManta(query){
-    console.log('inside scrapeYp function');
+    appLogger.logger.info('inside scrapeYp function');
     var industry = query.industry.replace(/ /g,'+');
     var location = query.location.replace(/ /g,'+');
     var page=query.page;
@@ -99,13 +100,13 @@ function scrapeManta(query){
     var jsonvalues=[];
     var today = new Date();
     var url='https://www.yellowpages.com/search?find_desc='+industry+'&find_loc='+location+'&start='+start;
-    console.log('page',page,'query:',query,'url:', url);
+  appLogger.logger.info('page',page,'query:',query,'url:', url);
     x(url, 'div.search-result', [{
         business_name:'a.biz-name.js-analytics-click',
         address: 'address',
         phone: 'span.biz-phone'
         }])(function(err, results){
-        console.log('scraped data', results)
+        appLogger.logger.info('scraped data', results)
         for(var i=0; i< results.length; i++){
         var add= results[i].address.replace(/\n        |\n    /g,'');
         var address= add +" ";
@@ -114,13 +115,13 @@ function scrapeManta(query){
         jsonvalues.push({"business_name":results[i].business_name,"address":add,"phone":phn,"website":url, "industry":query.industry, "search_location":query.location });
         }
         setTimeout(function(){
-        console.log(values);
+        appLogger.logger.info(values);
         databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
             if(err) {
-            console.log('DB Error');
+            appLogger.logger.info('DB Error');
             }
             else {
-            console.log('Successfully entered into the DB');
+            appLogger.logger.info('Successfully entered into the DB');
             }
             });
 
@@ -142,7 +143,7 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
         });
         }
         else
-        console.log('results',result);
+        appLogger.logger.info('results',result);
         if(result.length==0){
             var values=[];
             var jsonvalues=[];
@@ -157,13 +158,13 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
             };
             databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
             if(error) {
-            console.log("error ocurred",error);
+            appLogger.logger.info("error ocurred",error);
             res.send({
                 "code":400,
                 "failed":"error occurred while inserting into search history"
             });
             }else{
-            console.log('Entry made into search history');
+            appLogger.logger.info('Entry made into search history');
             }
             });
             var firstQuery={
@@ -216,7 +217,7 @@ exports.searchYp=function(req,res){
             });
         }
         else
-            console.log('results',result);
+            appLogger.logger.info('results',result);
             if(result.length==0){
             var values=[];
             var jsonvalues=[];
@@ -231,13 +232,13 @@ exports.searchYp=function(req,res){
             };
             databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
             if(error) {
-                console.log("error ocurred",error);
+                appLogger.logger.info("error ocurred",error);
                 res.send({
                 "code":400,
                 "failed":"error occurred while inserting into search history"
                 });
             }else{
-                console.log('Entry made into search history');
+                appLogger.logger.info('Entry made into search history');
             }
             });
             var firstQuery={
@@ -291,7 +292,7 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
         });
         }
         else
-        console.log('results',result);
+        appLogger.logger.info('results',result);
         if(result.length==0){
             var values=[];
             var jsonvalues=[];
@@ -306,13 +307,13 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
             };
             databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
             if(error) {
-            console.log("error ocurred",error);
+            appLogger.logger.info("error ocurred",error);
             res.send({
                 "code":400,
                 "failed":"error occurred while inserting into search history"
             });
             }else{
-            console.log('Entry made into search history');
+            appLogger.logger.info('Entry made into search history');
             }
             });
             var firstQuery={

@@ -4,6 +4,8 @@ var app = express();
 var path = require('path');
 var mysql = require('mysql');
 var databaseConnection = require('./database');
+var appLogger=require('../custom_utils/appLogger');
+
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
@@ -11,9 +13,9 @@ app.use('/*', express.static(path.resolve('dist')));
 
 
 router.post('/', function (req, res,body) {
-  console.log('user headers', req.headers);
+  appLogger.logger.info('user headers', req.headers);
   //passkey = window.atob(req.body.password);
-  console.log(req.body, 'passkey');
+  appLogger.logger.info(req.body, 'passkey');
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         databaseConnection.query(query,function(error, results, fields){
           if(error) {
@@ -28,17 +30,17 @@ router.post('/', function (req, res,body) {
                 res.send({
                 "code":401,
                 "status":"Unauthorized Access",
-                  });  
+                  });
                 }else{
                   res.status(200);
                   res.send({
                   "code":200,
                   "status":"User Authorized",
                   "result":results
-                    }); 
-                }            
+                    });
+                }
             }
-          });              
+          });
       });
 
 
