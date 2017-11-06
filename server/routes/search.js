@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var path = require('path');
-var search = require('./scrapeRoutes');
+var search = require('./scraperoutes');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
   });
 
   // switch(directory){
-  //   case "yelp": 
+  //   case "yelp":
   //     search.searchYelp(req, res);
   //     break;
   //   case "yp":
