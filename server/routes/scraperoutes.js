@@ -34,16 +34,16 @@ function scrapeYelp(query){
         console.log(values);
         databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
           if(err) {
-            console.log('Database Error');          
+            console.log('Database Error');
           }
           else {
             console.log('Successfully inserted to Database');
           }
           });
-      
+
       },3000);
       });
-  
+
   }
 
   function scrapeYp(query){
@@ -74,19 +74,19 @@ function scrapeYelp(query){
           console.log(values);
           databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
             if(err) {
-              console.log('DB Error');          
+              console.log('DB Error');
             }
             else {
               console.log('Successfully entered into the DB');
             }
             });
-        
+
         },3000);
         // console.log('values', values);
         // console.log('json', jsonvalues);
-  
+
           });
-    
+
     }
     function scrapeManta(query){
       console.log('inside scrapeYp function');
@@ -116,24 +116,24 @@ function scrapeYelp(query){
             console.log(values);
             databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
               if(err) {
-                console.log('DB Error');          
+                console.log('DB Error');
               }
               else {
                 console.log('Successfully entered into the DB');
               }
               });
-          
+
           },3000);
           // console.log('values', values);
           // console.log('json', jsonvalues);
-    
+
             });
-      
+
       }
 
   exports.searchYelp=function(req,res){
     // var start=(page-1)*10;
-   
+
     databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
       if(error) {
         res.send({
@@ -153,7 +153,7 @@ function scrapeYelp(query){
                 "location":req.query.location,
                 "industry":req.query.industry,
                 "search_directory":'Yelp',
-                "date":today              
+                "date":today
               };
               databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
               if(error) {
@@ -200,14 +200,14 @@ function scrapeYelp(query){
                         "url": "url"
                           });
                     }
-                  });              
+                  });
               }
           });
         }
 
         exports.searchYp=function(req,res){
           // var start=(page-1)*10;
-         
+
           databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
             if(error) {
               res.send({
@@ -227,7 +227,7 @@ function scrapeYelp(query){
                       "location":req.query.location,
                       "industry":req.query.industry,
                       "search_directory":'Yelp',
-                      "date":today              
+                      "date":today
                     };
                     databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
                     if(error) {
@@ -274,7 +274,7 @@ function scrapeYelp(query){
                               "url": "url"
                                 });
                           }
-                        });              
+                        });
                     }
                 });
               }
@@ -282,7 +282,7 @@ function scrapeYelp(query){
 
               exports.searchManta=function(req,res){
                 // var start=(page-1)*10;
-               
+
                 databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
                   if(error) {
                     res.send({
@@ -302,7 +302,7 @@ function scrapeYelp(query){
                             "location":req.query.location,
                             "industry":req.query.industry,
                             "search_directory":'Yelp',
-                            "date":today              
+                            "date":today
                           };
                           databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
                           if(error) {
@@ -349,7 +349,7 @@ function scrapeYelp(query){
                                     "url": "url"
                                       });
                                 }
-                              });              
+                              });
                           }
                       });
                     }
