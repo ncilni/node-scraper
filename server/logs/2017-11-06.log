@@ -1,0 +1,17 @@
+
+{"level":"info","message":"Intialized : nconf","timestamp":"2017-11-06T10:40:51.581Z"}
+{"level":"info","message":"Server Started .....","timestamp":"2017-11-06T10:40:51.611Z"}
+{"level":"info","message":"Port :  8020","timestamp":"2017-11-06T10:40:51.611Z"}
+{"level":"info","message":"Connecting Database :  mysql.intelegencia.com : 3306","timestamp":"2017-11-06T10:42:19.546Z"}
+{"level":"info","message":"Intialized : nconf","timestamp":"2017-11-06T10:42:19.606Z"}
+{"level":"info","message":"Server Started .....","timestamp":"2017-11-06T10:42:19.633Z"}
+{"level":"info","message":"Port :  8020","timestamp":"2017-11-06T10:42:19.633Z"}
+{"level":"info","message":"Database Connection Established","timestamp":"2017-11-06T10:42:19.680Z"}
+{"level":"info","message":"Connecting Database :  mysql.intelegencia.com : 3306","timestamp":"2017-11-06T10:42:37.562Z"}
+{"level":"info","message":"Intialized : nconf","timestamp":"2017-11-06T10:42:37.624Z"}
+{"level":"info","message":"Server Started .....","timestamp":"2017-11-06T10:42:37.652Z"}
+{"level":"info","message":"Port :  8020","timestamp":"2017-11-06T10:42:37.652Z"}
+{"level":"info","message":"Database Connection Established","timestamp":"2017-11-06T10:42:37.716Z"}
+{"level":"info","message":"Intialized : nconf","timestamp":"2017-11-06T10:43:59.111Z"}
+{"level":"info","message":"Server Started .....","timestamp":"2017-11-06T10:43:59.142Z"}
+{"level":"info","message":"Port :  8020","timestamp":"2017-11-06T10:43:59.142Z"}
