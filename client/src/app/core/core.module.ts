@@ -3,6 +3,7 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { TestService } from './test.service';
 import { SearchService } from './search.service';
+import { UsersService } from './users.service';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { SearchService } from './search.service';
   ],
   declarations: [],
   providers: [TestService,
-            SearchService]
+              SearchService,
+              UsersService]
 })
 export class CoreModule {}

@@ -7,15 +7,18 @@ import { SearchHistoryComponent } from './components/search-history/search-histo
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { ExporterComponent } from './components/exporter/exporter.component';
 import { LoginComponentComponent } from './components/login-component/login-component.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { AuthGuard } from './_guards/auth.guard';
 
 
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponentComponent },
+  { path: 'admin-panel' , component: AdminPanelComponent},
   { path: 'app', component:AppComponent , canActivate:[AuthGuard], children:[
     { path: 'history', component: SearchHistoryComponent, canActivate:[AuthGuard] , outlet:'home' },
     { path: 'result'  , component: SearchResultComponent, canActivate:[AuthGuard] ,outlet:'home'},
+    
     {
       path: 'search',
       component: SearchFormComponent,

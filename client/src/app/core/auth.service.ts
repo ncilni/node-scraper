@@ -18,7 +18,7 @@ export class AuthenticationService {
                 let user = response.json();
                 console.log(response.json());
                 if (user) {
-                    // store user details and jwt token in local stcdorage to keep user logged in between page refreshes
+                    // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }
  
