@@ -21,14 +21,6 @@ config.defaults({
   }
 })
 appLogger.logger.info("Intialized : nconf");
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
@@ -37,6 +29,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    appLogger.logger.info("Incoming Request : ", req.method, " | ", req.url, " | ", req.headers, " | ", req.body);
+  next();
+});
 //app.use('/api', index);
 app.use('/api/authenticate', authentication);
 app.use('/api/search', search);
@@ -44,10 +43,8 @@ app.use('/api/history', history);
 app.use('/api/users', users)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function(req, res) {
+  res.sendStatus(404);
 });
 
 // error handler
