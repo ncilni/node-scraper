@@ -45,4 +45,5 @@ exports.createJWT = function (username, userid, type){
 exports.decodeJWT = function (jwtToken){
     console.log("Decode JWT", jwtToken);
     return Jwt.decode(jwtToken);
+
 }

@@ -16,10 +16,8 @@ router.post('/', function (req, res, body) {
   console.log("POST Authenticate",  req.body.password);
   req.body.password = crypt.encrypt(req.body.password);
   console.log("Encrypted Body : ", req.body.password);
-  appLogger.logger.info('Username | Encrypted Password | Role', req.body.username, " | ", req.body.password, " | ", req.body.type, " | user headers", req.headers);
-
-  //passkey = window.atob(req.body.password);
-  appLogger.logger.info(req.body, 'passkey');
+  appLogger.logger.info('Username : ', req.body.username, ' | Password : *  |  Role : ',  req.body.type);
+ 
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
         console.log(query);
         databaseConnection.query(query,function(error, dbRecordset, fields){
@@ -43,7 +41,7 @@ router.post('/', function (req, res, body) {
                   var jwtToken = crypt.createJWT(dbRecordset[0].username, dbRecordset[0].User_Id, dbRecordset[0].type );
                  console.log("Decrypted Value : ", crypt.decodeJWT(jwtToken.token));
                   //JWT Token Save to Database against the User
-                  databaseConnection.query("UPDATE list_builder.users SET JwtToken='"+jwtToken+"' Where User_Id="+dbRecordset[0].User_Id, function(error, dbRecordset){
+                  databaseConnection.query("UPDATE list_builder.users SET JwtToken='"+jwtToken.token+"' Where User_Id="+dbRecordset[0].User_Id, function(error, dbRecordset){
                     if(error) {
                       res.status(500);
                       res.send({
@@ -51,12 +49,12 @@ router.post('/', function (req, res, body) {
                           "status":"Internal Server Error"
                           });
                       }else{
-                        res.header("Authorization", jwtToken);
+                        res.header("authorization", jwtToken.token);
                         res.status(200);
                         res.send({
                           "code":200,
                           "status":"Authorized Access"
-                            });
+                        });
                       }
                   });                    
                 }
