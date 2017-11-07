@@ -1,12 +1,10 @@
 var crypto = require('crypto');
 var Jwt = require('jsonwebtoken');
 var config = require('nconf');
-config.use('file', { file: '../config.json' });
+config.use('file', { file: './config.json' });
 
-var algorithm = "aes-256-ctr";
-var privateKey = "E4kINDIA_Doremon";
-//var algorithm = config.get('JWTConfigs:cryptAlgorithm');
-//var privateKey = config.get('JWTConfigs:secretKey');
+var algorithm = config.get('JWTConfigs:cryptAlgorithm');
+var privateKey = config.get('JWTConfigs:secretKey');
 
 
 exports.decrypt = function (password) {
@@ -37,13 +35,14 @@ exports.createJWT = function (username, userid, type){
         role : type,
         };
         var jwtToken = {
-            username : username,
+            username: username,
             token: Jwt.sign(tokenData, privateKey)
         };
         console.log("Final JWT", jwtToken);
         return jwtToken;
 }
 
-exports.validateJWT = function (jwtToken){
-
+exports.decodeJWT = function (jwtToken){
+    console.log("Decode JWT", jwtToken);
+    return Jwt.decode(jwtToken);
 }

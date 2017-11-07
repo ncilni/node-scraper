@@ -41,7 +41,7 @@ router.post('/', function (req, res, body) {
                   res.status(200);
                   console.log("DB Name : ", dbRecordset[0].username);
                   var jwtToken = crypt.createJWT(dbRecordset[0].username, dbRecordset[0].User_Id, dbRecordset[0].type );
-                 
+                 console.log("Decrypted Value : ", crypt.decodeJWT(jwtToken.token));
                   //JWT Token Save to Database against the User
                   databaseConnection.query("UPDATE list_builder.users SET JwtToken='"+jwtToken+"' Where User_Id="+dbRecordset[0].User_Id, function(error, dbRecordset){
                     if(error) {

@@ -12,10 +12,13 @@ app.use('/*', express.static(path.resolve('dist')));
 
 router.get('/', function (req, res) {
   console.log("Get History");
-  var jwtToken= req.headers.Authorization;
+  var jwtToken= req.headers.authorization;
   console.log("Get History");
   var userName=req.headers.username;
-  databaseConnection.query("Select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'",function(error, newresults, fields){
+  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
+  console.log("Query ", query);
+  databaseConnection.query(query,function(error, newresults, fields){
     if(error) {
       res.status(500);
       res.send({
@@ -23,6 +26,7 @@ router.get('/', function (req, res) {
         "status":"Internal Server Error"
           });
       }else{
+        console.log("New Reults : ", newresults);
         if(newresults.length>0){
         var query="SELECT * FROM search_history";
         databaseConnection.query(query,function(error, newresults, fields){
