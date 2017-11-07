@@ -5,19 +5,23 @@ var path = require('path');
 var mysql = require('mysql');
 var databaseConnection = require('./database');
 var appLogger=require('../custom_utils/appLogger');
-
+var crypt = require('../custom_utils/crypt');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
 
-router.post('/', function (req, res,body) {
-  appLogger.logger.info('user headers', req.headers);
-  //passkey = window.atob(req.body.password);
-  appLogger.logger.info(req.body, 'passkey');
+router.post('/', function (req, res, body) {
+  console.log("POST Authenticate",  req.body.password);
+  req.body.password = crypt.encrypt(req.body.password);
+  console.log("Encrypted Body : ", req.body.password);
+  appLogger.logger.info('Username : ', req.body.username, ' | Password : *  |  Role : ',  req.body.type);
+ 
         var query="SELECT username, User_Id, firstname, lastname, type FROM users where username= '"+req.body.username+"' and password='"+req.body.password+"'";
-        databaseConnection.query(query,function(error, results, fields){
+        console.log(query);
+        databaseConnection.query(query,function(error, dbRecordset, fields){
+          console.log("Complete Recordset : ", dbRecordset);
           if(error) {
             res.status(500);
             res.send({
@@ -25,7 +29,7 @@ router.post('/', function (req, res,body) {
               "status":"Internal Server Error"
                 });
             }else{
-              if(results.length==0){
+              if(dbRecordset.length == 0){
                 res.status(401);
                 res.send({
                 "code":401,
@@ -33,11 +37,26 @@ router.post('/', function (req, res,body) {
                   });
                 }else{
                   res.status(200);
-                  res.send({
-                  "code":200,
-                  "status":"User Authorized",
-                  "result":results
-                    });
+                  console.log("DB Name : ", dbRecordset[0].username);
+                  var jwtToken = crypt.createJWT(dbRecordset[0].username, dbRecordset[0].User_Id, dbRecordset[0].type );
+                 console.log("Decrypted Value : ", crypt.decodeJWT(jwtToken.token));
+                  //JWT Token Save to Database against the User
+                  databaseConnection.query("UPDATE list_builder.users SET JwtToken='"+jwtToken.token+"' Where User_Id="+dbRecordset[0].User_Id, function(error, dbRecordset){
+                    if(error) {
+                      res.status(500);
+                      res.send({
+                          "code":500,
+                          "status":"Internal Server Error"
+                          });
+                      }else{
+                        res.header("authorization", jwtToken.token);
+                        res.status(200);
+                        res.send({
+                          "code":200,
+                          "status":"Authorized Access"
+                        });
+                      }
+                  });                    
                 }
             }
           });

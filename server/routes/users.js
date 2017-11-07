@@ -3,93 +3,53 @@ var router = express.Router();
 var app = express();
 var path = require('path');
 var databaseConnection = require('./database');
-var appLogger=require('../custom_utils/appLogger');
+var appLogger = require('../custom_utils/appLogger');
+var crypt = require('../custom_utils/crypt');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-router.get('/', function (req, res) {
-  var listQuery = req.query.list;
-  if (listQuery=='all'){
-        var query="SELECT User_Id, firstname, lastname, username, type FROM users";
-        databaseConnection.query(query,function(error, newresults, fields){
-          if(error) {
-            res.status(500);
-            res.send({
-              "code":500,
-              "status":"Internal Server Error"
-                });
-            }else{
-              res.status(200);
-              res.send({
-                "code":200,
-                "status":"Success",
-                "result":newresults
-                });
-            }
+router.get('/', function (req, res) {  
+  console.log("Get Users");
+  var jwtToken= req.headers.authorization;
+  console.log("Get Users");
+  var userName=req.headers.username;
+  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"' and type=1";
+  console.log("Query ", query);
+  databaseConnection.query(query,function(error, dbRecordset, fields){
+    if(error) {
+      res.status(500);
+      res.send({
+        "code":500,
+        "status":"Internal Server Error"
           });
-        }else{
-          var query="SELECT User_Id, firstname, lastname, username, type FROM users Where User_Id="+listQuery;
-          databaseConnection.query(query,function(error, newresults, fields){
+      }else{
+        console.log("New Results : ", dbRecordset);
+        if(dbRecordset.length>0){
+            var listQuery = req.query.list;
+            if (listQuery=='all'){
+            var query="SELECT User_Id, firstname, lastname, username, type FROM users";
+            databaseConnection.query(query,function(error, dbRecordset, fields){
             if(error) {
-              res.status(500);
-              res.send({
+                res.status(500);
+                res.send({
                 "code":500,
                 "status":"Internal Server Error"
-                  });
-              }else{
-                if(newresults.length==0){
-                  res.status(400);
-                  res.send({
-                    "code":400,
-                    "status":"Bad request ",
-                    "message": "User Does not Exist"
                     });
                 }else{
-                  res.status(200);
-                  res.send({
+                res.status(200);
+                res.send({
                     "code":200,
                     "status":"Success",
-                    "result":newresults
+                    "result":dbRecordset
                     });
                 }
-
-              }
             });
-        }
-      });
-
-router.delete('/', function (req, res) {
-  var userId = req.query.userId;
-        var query="delete FROM users where user_Id="+userId;
-        databaseConnection.query(query,function(error, fields){
-          appLogger.logger.info('response from db',fields);
-          if(error) {
-            res.status(500);
-            res.send({
-              "code":500,
-              "status":"Internal Server Error"
-                });
-              } else{
-                res.status(204);
-                res.send({
-                  "code":204,
-                  "status":"No Content"
-                  });
-              }
-      });
-});
-
-router.put('/', function (req, res) {
-    var values=[];
-    values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
-    appLogger.logger.info('values',values);
-    databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
-      if(!error) {
-          appLogger.logger.info('results',results);
-            if(results.length==0){
-              databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
+            }else{
+            var query="SELECT User_Id, firstname, lastname, username, type FROM users Where User_Id="+listQuery;
+            databaseConnection.query(query,function(error, dbRecordset, fields){
                 if(error) {
                 res.status(500);
                 res.send({
@@ -97,7 +57,97 @@ router.put('/', function (req, res) {
                     "status":"Internal Server Error"
                     });
                 }else{
-                    appLogger.logger.info("Send Status : ", newresults, "End");
+                    if(dbRecordset.length==0){
+                    res.status(400);
+                    res.send({
+                        "code":400,
+                        "status":"Bad request ",
+                        "message": "User Does not Exist"
+                        });
+                    }else{
+                    res.status(200);
+                    res.send({
+                        "code":200,
+                        "status":"Success",
+                        "result":dbRecordset
+                        });
+                    }
+
+                }
+                });
+            }
+        }else{
+          res.sendStatus(401);
+        }
+      }
+  });
+});
+
+router.delete('/', function (req, res) {
+  console.log("Delete Users");
+  var jwtToken= req.headers.authorization;
+  console.log("Delete Users");
+  var userName=req.headers.username;
+  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"' and type=1";
+  console.log("Query ", query);
+  databaseConnection.query(query,function(error, dbRecordset, fields){
+    if(error) {
+      res.status(500);
+      res.send({
+        "code":500,
+        "status":"Internal Server Error"
+          });
+      }else{
+        console.log("New Results : ", dbRecordset);
+        if(dbRecordset.length>0){  
+          var userId = req.query.userId;
+          var query="delete FROM users where user_Id="+userId;
+          databaseConnection.query(query,function(error, fields){
+            appLogger.logger.info('response from db',fields);
+            if(error) {
+              res.status(500);
+              res.send({
+                "code":500,
+                "status":"Internal Server Error"
+                  });
+                } else{
+                  res.status(204);
+                  res.send({
+                    "code":204,
+                    "status":"No Content"
+                    });
+                }
+          });
+        }else{
+          res.sendStatus(401);
+        }
+      }
+  });
+});
+
+
+//Register User
+router.put('/', function (req, res){
+  req.body.password = crypt.encrypt(req.body.password);
+  appLogger.logger.info('Username | Encrypted Password | Role', req.body.username, " | ", req.body.password, " | ", req.body.type);
+
+    var values=[];
+    values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
+    appLogger.logger.info('values',values);
+    databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, dbRecordset, fields){
+      if(!error) {
+          appLogger.logger.info('results',dbRecordset);
+            if(dbRecordset.length==0){
+              databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, dbRecordset){
+                if(error) {
+                res.status(500);
+                res.send({
+                    "code":500,
+                    "status":"Internal Server Error"
+                    });
+                }else{
+                    appLogger.logger.info("Send Status : ", dbRecordset, "End");
                     res.status(201);
                     res.send({
                     "code":201,
@@ -122,44 +172,97 @@ router.put('/', function (req, res) {
         }
     });
 });
+  
+
+// router.put('/', function (req, res) {
+//     var values=[];
+//     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
+//     appLogger.logger.info('values',values);
+//     databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
+//       if(!error) {
+//           appLogger.logger.info('results',results);
+//             if(results.length==0){
+//               databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
+//                 if(error) {
+//                 res.status(500);
+//                 res.send({
+//                     "code":500,
+//                     "status":"Internal Server Error"
+//                     });
+//                 }else{
+//                     appLogger.logger.info("Send Status : ", newresults, "End");
+//                     res.status(201);
+//                     res.send({
+//                     "code":201,
+//                     "status":"User Created"
+//                     });
+//                 }
+//             });
+//             } else{
+//               res.status(400);
+//               res.send({
+//                 "code":400,
+//                 "status":"User already exists"
+//                     });
+//             }
+//         }
+//         else{
+//           res.status(500);
+//           res.send({
+//             "code":500,
+//             "status":"Internal Server Error"
+//           });
+//         }
+//     });
+// });
 
 router.post('/', function (req, res) {
-  databaseConnection.query("SELECT * FROM users where user_Id= '"+req.body.userId+"'",function(error, results, fields){
-    if(!error) {
-        appLogger.logger.info('results',results);
-          if(results.length==0){
-            res.status(400);
-            res.send({
-              "code":400,
-              "status":"User Doesn't exist"
-                  });
-          } else{
-            databaseConnection.query("UPDATE list_builder.users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', username='"+req.body.username+"', type="+req.body.type+" Where user_Id="+req.body.userId, function(error, newresults){
-              if(error) {
-              res.status(500);
-              res.send({
-                  "code":500,
-                  "status":"Internal Server Error"
-                  });
-              }else{
-                  appLogger.logger.info("Send Status : ", newresults, "End");
-                  res.status(200);
-                  res.send({
-                  "code":200,
-                  "status":"Successfully updated"
-                  });
-              }
+
+
+  console.log("Get History");
+  var jwtToken= req.headers.authorization;
+  if(crypt.decodeJWT(jwtToken).role == 0){
+    res.sendStatus(401);
+  }
+
+  var userName=req.headers.username;
+  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
+  console.log("Query ", query);
+  databaseConnection.query(query,function(error, dbRecordset, fields){
+    if(error) {
+      res.status(500);
+      res.send({
+        "code":500,
+        "status":"Internal Server Error"
           });
-        }
-    }
-      else{
-        res.status(500);
-        res.send({
-          "code":500,
-          "status":"Internal Server Error"
+    }else{
+      console.log("New Results : ", dbRecordset[0].User_Id);
+      if(dbRecordset.length>0){
+        var query = "UPDATE list_builder.users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', username='"+req.body.username+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id; 
+        console.log("Update Query :", query);
+        databaseConnection.query(query, function(error, dbRecordset){
+          if(error) {
+          res.status(500);
+          res.send({
+            "code":500,
+            "status":"Internal Server Error"
+          });
+          }else{
+            appLogger.logger.info("Send Status : ", dbRecordset, "End");
+            res.status(200);
+            res.send({
+            "code":200,
+            "status":"Successfully updated"
+            });
+          }
         });
       }
-  });
+    else{
+      res.sendStatus(401);
+    }
+  }
+ });
 });
 
 module.exports = router;
