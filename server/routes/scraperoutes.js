@@ -51,11 +51,10 @@ console.log('inside scrapeYp function');
     var industry = query.industry.replace(/ /g,'+');
     var location = query.location.replace(/ /g,'+');
     var page=query.page;
-    var start=(page-1)*10;
     var values=[];
     var jsonvalues=[];
     var today = new Date();
-    var url='https://www.yellowpages.com/search?find_desc='+industry+'&find_loc='+location+'&start='+start;
+    var url='https://www.yellowpages.com/search?find_desc='+industry+'&find_loc='+location+'&page='+start;
     console.log('page',page,'query:',query,'url:', url);
     x(url, 'div.search-result', [{
     business_name:'a.biz-name.js-analytics-click',
@@ -98,7 +97,7 @@ function scrapeManta(query){
     var values=[];
     var jsonvalues=[];
     var today = new Date();
-    var url='https://www.yellowpages.com/search?find_desc='+industry+'&find_loc='+location+'&start='+start;
+    var url='https://www.yellowpages.com/search?search_terms='+industry+'&geo_location_terms='+location+'&page='+start;
     console.log('page',page,'query:',query,'url:', url);
     x(url, 'div.search-result', [{
         business_name:'a.biz-name.js-analytics-click',
@@ -157,11 +156,11 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
             };
             databaseConnection.query('INSERT INTO search_history SET ?',search, function (error, scrapes, fields) {
             if(error) {
-            console.log("error ocurred",error);
-            res.send({
-                "code":400,
-                "failed":"error occurred while inserting into search history"
-            });
+                res.status(500);
+                res.send({
+                    "code":500,
+                    "status":"Internal Server Error"
+                    });
             }else{
             console.log('Entry made into search history');
             }
@@ -172,7 +171,7 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
             'page':1
             }
             scrapeYelp(firstQuery);
-            for (var i = 2; i <= 10; i++) {
+            for (var i = 2; i <= 100; i++) {
             (function (i) {
                 setTimeout(function () {
                 var query={
@@ -210,9 +209,10 @@ exports.searchYp=function(req,res){
 
     databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
     if(error) {
+        res.status(500);
         res.send({
-        "code":500,
-        "Failure":"Internal Server Error"
+          "code":500,
+          "status":"Internal Server Error"
             });
         }
         else

@@ -21,7 +21,7 @@ export class SearchService {
     
   }
   getHistory(){
-    return this.http.get('http://scrapper.intelegencia.com/api/history/');
+    return this.http.get('http://localhost:8020/api/history/');
   }
 
   getHistoryResults(query){

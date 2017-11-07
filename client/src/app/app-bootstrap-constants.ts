@@ -21,6 +21,17 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from './core/core.module';
 import { MainSkinComponent } from './skin/main-skin/main-skin.component';
+import { AlertComponent } from "./components/_directives/alert/alert.component";
+import { AdminPanelComponent } from "./components/admin-panel/admin-panel.component";
+import { CsvService } from "angular2-json2csv";
+import { Logger } from "angular2-logger/core";
+import { AuthGuard } from "./_guards/auth.guard";
+import { AuthenticationService } from "./core/auth.service";
+import { AlertService } from "./core/alert.service";
+import {FormControl,FormGroup} from '@angular/forms';
+import { UsersService } from "./core/users.service";
+
+
 
 // @NgModule({
 //   imports: [
@@ -55,5 +66,11 @@ export const AppBootstrapDeclaration = [
   DataTableComponent,
   ResultCardComponent,
   LoginComponentComponent,
-  MainSkinComponent
+  MainSkinComponent,
+  AlertComponent,
+  AdminPanelComponent
+]
+
+export const AppProviders = [
+  CsvService, Logger,AuthGuard,AuthenticationService,AlertService
 ]

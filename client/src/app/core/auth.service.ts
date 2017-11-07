@@ -12,7 +12,7 @@ export class AuthenticationService {
     login(username: string, password: string) {
         let passkey = window.btoa(password);
         this.reqHeaders.append('Content-Type','application/json');
-        return this.http.post('http://lx2.intelegencia.com:8020/api/authenticate', JSON.stringify({ username: username, password: passkey }), {headers:this.reqHeaders})
+        return this.http.post('http://localhost:8020/api/authenticate', JSON.stringify({ username: username, password: passkey }), {headers:this.reqHeaders})
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
