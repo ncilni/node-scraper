@@ -16,12 +16,13 @@ export class UsersService {
         return this.http.put(API_URL +'api/users', JSON.stringify({ username: query.username, password: query.password, firstname: query.firstname, lastname: query.lastname, type: query.type  }), {headers:this.reqHeaders});
     }
     editUser(query){
+        console.log("Update request for queries:", query, "url hitting:",API_URL+'api/users');
         this.reqHeaders.append('Content-Type','application/json');
-        return this.http.post(API_URL +'api/users', JSON.stringify({ username: query.username, firstname: query.firstname, lastname: query.lastname, type: query.type  }), {headers:this.reqHeaders});    
+        return this.http.post(API_URL +'api/users', JSON.stringify({ userId:query.User_Id ,username: query.username, firstname: query.firstname, lastname: query.lastname, type: query.type  }), {headers:this.reqHeaders});    
     }
     deleteUser(userId){
-       // console.log("delete request for userId:", userId, "url hitting:",API_URL+'api/users?userId='+userId);
-        this.http.delete(API_URL+'api/users?userId='+userId);
+       this.reqHeaders.append('Content-Type','application/json'); 
+       return this.http.delete(API_URL+'api/users/?userId='+userId);
     }
      
     getUser(){

@@ -10,6 +10,8 @@ import { User } from "../../modals/admin.modals";
 })
 export class AdminPanelComponent implements OnInit {
   isActive = 'pills-home';
+  confirmPassword='';
+  formValidity:boolean=true;
   userList = [];
   selectedUser = {
     "User_Id" : '',
@@ -18,7 +20,16 @@ export class AdminPanelComponent implements OnInit {
     "type":0,
     "username":''
   };
+  newUser = {
+    "firstname" :'',
+    "lastname":'',
+    "password":'',
+    "type":0,
+    "username":''
+  };
+
   public UserSearchForm: FormControl;
+  public UserRegistrationForm: FormControl;
   constructor(private userService:UsersService) { 
     this.getUserList();
   }
@@ -33,7 +44,6 @@ export class AdminPanelComponent implements OnInit {
     this.userService.getUser().subscribe(res =>{
       let response = res.json();
       this.userList = response.result;
-      console.log(this.userList);
    });
   }
   ngOnInit() {
@@ -41,11 +51,15 @@ export class AdminPanelComponent implements OnInit {
   }
 
   updateRecord(){
-    this.userService.editUser(this.selectedUser);
+    this.userService.editUser(this.selectedUser).subscribe(() => this.getUserList());
+  }
+  
+  createUser(){
+
   }
 
   deleteRecord(){
-    this.userService.deleteUser(this.selectedUser.User_Id);
+    this.userService.deleteUser(this.selectedUser.User_Id).subscribe(() => this.getUserList());
   }
 
   activefun(tab){
