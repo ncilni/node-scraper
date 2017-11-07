@@ -18,7 +18,7 @@ router.get('/', function (req, res) {
   console.log("Query ", req.headers.authorization, " | ", req.headers.username);
   var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
   console.log("Query ", query);
-  databaseConnection.query(query,function(error, newresults, fields){
+  databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {
       res.status(500);
       res.send({
@@ -26,10 +26,10 @@ router.get('/', function (req, res) {
         "status":"Internal Server Error"
           });
       }else{
-        console.log("New Reults : ", newresults);
-        if(newresults.length>0){
+        console.log("New Results : ", dbRecordset);
+        if(dbRecordset.length>0){
         var query="SELECT * FROM search_history";
-        databaseConnection.query(query,function(error, newresults, fields){
+        databaseConnection.query(query,function(error, dbRecordset, fields){
           if(error) {
             res.status(500);
             res.send({
@@ -37,12 +37,12 @@ router.get('/', function (req, res) {
               "status":"Internal Server Error"
                 });
             }else{
-              appLogger.logger.info(newresults);
+              appLogger.logger.info(dbRecordset);
               res.status(200);
               res.send({
                 "code":200,
                 "status":"Success",
-                "result":newresults
+                "result":dbRecordset
                 });
             }
           });
@@ -50,14 +50,16 @@ router.get('/', function (req, res) {
           res.sendStatus(401);
         }
       }
-
-  })
+  });
 });
 
 router.get('/results', function (req, res) {
-  var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+"' and industry='"+req.query.industry+"'";
-  appLogger.logger.info('query', query);
-  databaseConnection.query(query,function(error, newresults, fields){
+  var jwtToken= req.headers.authorization;
+  var userName=req.headers.username;
+  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
+  console.log("Query ", query);
+  databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {
       res.status(500);
       res.send({
@@ -65,20 +67,33 @@ router.get('/results', function (req, res) {
         "status":"Internal Server Error"
           });
       }else{
-        res.status(200);
-        res.send({
-          "code":200,
-          "status":"Success",
-          "result":newresults
-            });
-      }
+        var selectQuery="SELECT * FROM search_results WHERE search_location= '"+req.query.location+"' and industry='"+req.query.industry+"'";
+        appLogger.logger.info('query', selectQuery);
+        databaseConnection.query(selectQuery,function(error, dbRecordset, fields){
+          if(error) {
+            res.status(500);
+            res.send({
+              "code":500,
+              "status":"Internal Server Error"
+                });
+            }else{
+              res.status(200);
+              res.send({
+                "code":200,
+                "status":"Success",
+                "result":dbRecordset
+                  });
+            }
+          });
+        }
     });
 });
+
 router.get('/location', function (req, res) {
     var industry= req.query.industry;
     appLogger.logger.info(industry);
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
-    databaseConnection.query(query,function(error, newresults, fields){
+    databaseConnection.query(query,function(error, dbRecordset, fields){
       if(error) {
         res.status(500);
         res.send({
@@ -90,7 +105,7 @@ router.get('/location', function (req, res) {
           res.send({
             "code":200,
             "status":"Success",
-            "result":newresults
+            "result":dbRecordset
               });
         }
       });
@@ -104,7 +119,7 @@ router.get('/location', function (req, res) {
     var location= req.query.location;
     appLogger.logger.info('format requested',format);
     var query="SELECT DISTINCT(location) AS search_location FROM search_history WHERE industry='"+industry+"'";
-    databaseConnection.query(query,function(error, newresults, fields){
+    databaseConnection.query(query,function(error, dbRecordset, fields){
       if(error) {
         res.status(500);
         res.send({
@@ -112,12 +127,12 @@ router.get('/location', function (req, res) {
           "Failure":"Internal Server Error"
             });
         }else{
-          appLogger.logger.info(newresults);
+          appLogger.logger.info(dbRecordset);
           res.status(200);
           res.send({
             "code":200,
             "success":"Records from db",
-            "result":newresults
+            "result":dbRecordset
               });
         }
       });
