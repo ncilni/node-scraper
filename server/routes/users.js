@@ -3,7 +3,8 @@ var router = express.Router();
 var app = express();
 var path = require('path');
 var databaseConnection = require('./database');
-var appLogger=require('../custom_utils/appLogger');
+var appLogger = require('../custom_utils/appLogger');
+var crypt = require('../custom_utils/crypt');
 
 app.use(express.static('/'));
 app.use(express.static('dist'));
@@ -81,7 +82,12 @@ router.delete('/', function (req, res) {
       });
 });
 
-router.put('/', function (req, res) {
+
+//Register User
+router.put('/', function (req, res){
+  req.body.password = crypt.encrypt(req.body.password);
+  appLogger.logger.info('Username | Encrypted Password | Role', req.body.username, " | ", req.body.password, " | ", req.body.type);
+
     var values=[];
     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
     appLogger.logger.info('values',values);
@@ -122,6 +128,49 @@ router.put('/', function (req, res) {
         }
     });
 });
+  
+
+// router.put('/', function (req, res) {
+//     var values=[];
+//     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
+//     appLogger.logger.info('values',values);
+//     databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
+//       if(!error) {
+//           appLogger.logger.info('results',results);
+//             if(results.length==0){
+//               databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
+//                 if(error) {
+//                 res.status(500);
+//                 res.send({
+//                     "code":500,
+//                     "status":"Internal Server Error"
+//                     });
+//                 }else{
+//                     appLogger.logger.info("Send Status : ", newresults, "End");
+//                     res.status(201);
+//                     res.send({
+//                     "code":201,
+//                     "status":"User Created"
+//                     });
+//                 }
+//             });
+//             } else{
+//               res.status(400);
+//               res.send({
+//                 "code":400,
+//                 "status":"User already exists"
+//                     });
+//             }
+//         }
+//         else{
+//           res.status(500);
+//           res.send({
+//             "code":500,
+//             "status":"Internal Server Error"
+//           });
+//         }
+//     });
+// });
 
 router.post('/', function (req, res) {
   databaseConnection.query("SELECT * FROM users where user_Id= '"+req.body.userId+"'",function(error, results, fields){

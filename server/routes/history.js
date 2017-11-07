@@ -11,6 +11,19 @@ app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
 router.get('/', function (req, res) {
+  console.log("Get History");
+  var jwtToken= req.headers.Authorization;
+  console.log("Get History");
+  var userName=req.headers.username;
+  databaseConnection.query("Select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'",function(error, newresults, fields){
+    if(error) {
+      res.status(500);
+      res.send({
+        "code":500,
+        "status":"Internal Server Error"
+          });
+      }else{
+        if(newresults.length>0){
         var query="SELECT * FROM search_history";
         databaseConnection.query(query,function(error, newresults, fields){
           if(error) {
@@ -29,7 +42,13 @@ router.get('/', function (req, res) {
                 });
             }
           });
-      });
+        }else{
+          res.sendStatus(401);
+        }
+      }
+
+  })
+});
 
 router.get('/results', function (req, res) {
   var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+"' and industry='"+req.query.industry+"'";

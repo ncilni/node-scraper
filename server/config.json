@@ -8,5 +8,9 @@
         "user" : "user_listbuilder",
         "password" : "intel@01",
         "database" : "list_builder"        
+    },
+    "JWTConfigs":{
+        "secretKey" : "E4kINDIA_Doremon",
+        "cryptAlgorithm" : "aes-256-ctr"
     }
 }
