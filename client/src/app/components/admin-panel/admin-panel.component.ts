@@ -41,11 +41,13 @@ export class AdminPanelComponent implements OnInit {
   }
 
   getUserList(){
-    let response = this.userService.getUser();
-    console.log(response);
-      // this.userList = response.result;
-   
+    let response = this.userService.getUser().subscribe(
+      (users: any) => {
+        users = users.json();
+     this.userList = users.result;
+      });;
   }
+  
   ngOnInit() {
     this.UserSearchForm = new FormControl();
   }

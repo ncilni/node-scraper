@@ -7,10 +7,3 @@ export const environment = {
   production: false,
   origin:'http://localhost:8020/api'
 };
-export const production = {
-  API_URL : 'http://lx2.intelegencia.com:8020/api'
-}
-
-export const development = {
-  API_URL : 'http://localhost:8020/api'
-}
