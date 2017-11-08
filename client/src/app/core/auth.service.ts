@@ -14,8 +14,10 @@ export class AuthenticationService {
         
         this.reqHeaders.append('Content-Type','application/json');
         return this.http
-          .post('/authenticate',
+          .post(
+            this.API_URL + '/authenticate',
             JSON.stringify({ username: username, password: password }),
+            { headers: this.reqHeaders }
           )
           .map((response: Response) => {
             // login successful if there's a jwt token in the response
@@ -24,8 +26,7 @@ export class AuthenticationService {
             
             if (user) {
               // store user details and jwt token in local storage to keep user logged in between page refreshes
-              localStorage.setItem('HashKey', JSON.stringify(user));
-              localStorage.setItem('currentUser', JSON.stringify(username));
+              localStorage.setItem('currentUser', JSON.stringify(user));
             }
 
             return user;
