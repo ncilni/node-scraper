@@ -28,20 +28,7 @@ router.get('/', function (req, res) {
       }else{
         console.log("New Results : ", dbRecordset);
         if(dbRecordset.length>0){
-        switch(directory){
-          case "yelp":
-            console.log("Yelp case satisfied")
-            scraper.searchYelp(req, res);
-            break;
-          case "yp":
-            console.log("Yp case satisfied")
-            scraper.searchyp(req, res);
-            break;
-          case "manta":
-            console.log("Manta case satisfied")
-            scraper.searchmanta(req, res);
-            break;
-          }
+          scraper.search(req, res);
         }else{
           res.sendStatus(401);
         }
