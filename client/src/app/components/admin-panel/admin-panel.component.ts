@@ -45,9 +45,12 @@ export class AdminPanelComponent implements OnInit {
       (users: any) => {
         users = users.json();
      this.userList = users.result;
-      });;
+      },(err =>{
+        throw new Error(err);
+      })
+    );
   }
-  
+
   ngOnInit() {
     this.UserSearchForm = new FormControl();
   }

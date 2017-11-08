@@ -33,6 +33,8 @@ import { UsersService } from "./core/users.service";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {HttpModule, Http, XHRBackend, RequestOptions} from '@angular/http';
 import { httpFactory } from './core/factory/http.factory';
+import { ErrorHandler } from '@angular/core';
+import { ScrapperErrorHandler } from './core/factory/errorhandle.factory';
 
 
 // @NgModule({
@@ -78,5 +80,5 @@ export const AppProviders = [
     provide: Http,
     useFactory: httpFactory,
     deps: [XHRBackend, RequestOptions]
-  }],
+  }],{provide: ErrorHandler, useClass: ScrapperErrorHandler}
 ]
