@@ -52,7 +52,6 @@ appLogger.logger.info('inside scrapeYp function');
     var industry = query.industry.replace(/ /g,'+');
     var location = query.location.replace(/ /g,'+');
     var page=query.page;
-    var start=(page-1)*10;
     var values=[];
     var jsonvalues=[];
     var today = new Date();
@@ -173,7 +172,7 @@ databaseConnection.query("SELECT searchId FROM search_history where location= '"
             'page':1
             }
             scrapeYelp(firstQuery);
-            for (var i = 2; i <= 10; i++) {
+            for (var i = 2; i <= 100; i++) {
             (function (i) {
                 setTimeout(function () {
                 var query={
@@ -211,9 +210,10 @@ exports.searchYp=function(req,res){
 
     databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
     if(error) {
+        res.status(500);
         res.send({
-        "code":500,
-        "Failure":"Internal Server Error"
+          "code":500,
+          "status":"Internal Server Error"
             });
         }
         else
