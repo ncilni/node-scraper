@@ -6,6 +6,8 @@ var mysql = require('mysql');
 var databaseConnection = require('./database');
 var appLogger=require('../custom_utils/appLogger');
 
+var crypt = require('../custom_utils/crypt');
+
 app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
@@ -14,8 +16,8 @@ router.get('/', function (req, res) {
   console.log("Get History");
   var jwtToken= req.headers.authorization;
   console.log("Get History");
-  var userName=req.headers.username;
-  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
+  var userName= crypt.decodeJWT(jwtToken).username;
+  console.log("Query + Username ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
   var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
