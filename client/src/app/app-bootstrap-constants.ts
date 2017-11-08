@@ -30,7 +30,9 @@ import { AuthenticationService } from "./core/auth.service";
 import { AlertService } from "./core/alert.service";
 import {FormControl,FormGroup} from '@angular/forms';
 import { UsersService } from "./core/users.service";
-
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HttpModule, Http, XHRBackend, RequestOptions} from '@angular/http';
+import { httpFactory } from './core/factory/http.factory';
 
 
 // @NgModule({
@@ -72,5 +74,9 @@ export const AppBootstrapDeclaration = [
 ]
 
 export const AppProviders = [
-  CsvService, Logger,AuthGuard,AuthenticationService,AlertService
+  CsvService, Logger,AuthGuard,AuthenticationService,AlertService, [{
+    provide: Http,
+    useFactory: httpFactory,
+    deps: [XHRBackend, RequestOptions]
+  }],
 ]
