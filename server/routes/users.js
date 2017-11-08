@@ -10,14 +10,12 @@ app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-router.get('/', function (req, res) {
-  console.log("Incoming request: ",req.headers.username, "token :", req.headers.authorization);  
+router.get('/', function (req, res) {  
   console.log("Get Users");
   var jwtToken= req.headers.authorization;
   console.log("Get Users");
-  var userName=req.headers.username;
-  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
-  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"' and type=1";
+  console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {
@@ -88,9 +86,8 @@ router.delete('/', function (req, res) {
   console.log("Delete Users");
   var jwtToken= req.headers.authorization;
   console.log("Delete Users");
-  var userName=req.headers.username;
-  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
-  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"' and type=1";
+  console.log("Query ", req.headers.authorization, " | ",crypt.decodeJWT(jwtToken).username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {
@@ -129,7 +126,7 @@ router.delete('/', function (req, res) {
 
 
 //Register User
-router.put('/', function (req, res){
+router.post('/', function (req, res){
   req.body.password = crypt.encrypt(req.body.password);
   appLogger.logger.info('Username | Encrypted Password | Role', req.body.username, " | ", req.body.password, " | ", req.body.type);
 
@@ -217,7 +214,7 @@ router.put('/', function (req, res){
 //     });
 // });
 
-router.post('/', function (req, res) {
+router.put('/', function (req, res) {
 
 
   console.log("Get History");
@@ -226,9 +223,8 @@ router.post('/', function (req, res) {
     res.sendStatus(401);
   }
 
-  var userName=req.headers.username;
-  console.log("Query ", req.headers.authorization, " | ", req.headers.username);
-  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
+  console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"'";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {

@@ -152,9 +152,8 @@ router.get('/location', function (req, res) {
     console.log("Get History/export");
     var jwtToken= req.headers.authorization;
     console.log("Get History/export");
-    var userName=req.headers.username;
-    console.log("Query ", req.headers.authorization, " | ", req.headers.username);
-    var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+userName+"'";
+    console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
+    var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"'";
     console.log("Query ", query);
     databaseConnection.query(query,function(error, dbRecordset, fields){
       if(error) {
