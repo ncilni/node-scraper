@@ -60,7 +60,7 @@ export class AdminPanelComponent implements OnInit {
   }
   
   createUser(){
-
+    this.userService.createUser(this.newUser).subscribe(() => this.getUserList());
   }
 
   deleteRecord(){
