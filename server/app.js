@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   // since the angular http does not show all the custom headers so adding the below code
-  res.header("Access-Control-Expose-Headers", "authorization");
+  res.header("Access-Control-Expose-Headers", "authorization, username");
   appLogger.logger.info("Incoming Request : ", req.method, " | ", req.url, " | ", req.headers);
   next();
 });

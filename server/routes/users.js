@@ -10,7 +10,8 @@ app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-router.get('/', function (req, res) {  
+router.get('/', function (req, res) {
+  console.log("Incoming request: ",req.headers.username, "token :", req.headers.authorization);  
   console.log("Get Users");
   var jwtToken= req.headers.authorization;
   console.log("Get Users");

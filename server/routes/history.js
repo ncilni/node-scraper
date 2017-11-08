@@ -6,6 +6,8 @@ var mysql = require('mysql');
 var databaseConnection = require('./database');
 var appLogger=require('../custom_utils/appLogger');
 
+var crypt = require('../custom_utils/crypt');
+
 app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
