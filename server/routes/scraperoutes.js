@@ -33,10 +33,10 @@ function scrapeYelp(query){
                 setTimeout(function(){
                 databaseConnection.query('INSERT INTO search_results (business_name, address, phone, website, search_location, industry) VALUES ?', [values], function(err,result) {
                     if(err) {
-                        appLogger.logger.error('Database Error');
+                        appLogger.logger.error("Database Error while inserting data from yelp's page");
                     }
                     else {
-                        appLogger.logger.info('Successfully inserted scraped data to Database'," | ", "page",page);
+                        appLogger.logger.info("Successfully inserted Yelp's scraped data to Database | ", "page",page);
                     }
                     });
         
@@ -53,17 +53,14 @@ console.log('inside scrapeYp function');
     var page=query.page;
     var values=[];
     var today = new Date();
-    var url='https://www.yellowpages.com/search?find_desc='+industry+'&find_loc='+location+'&page='+start;
+    var url='https://www.yellowpages.com/search?search_terms='+industry+'&geo_location_terms='+location+'&page='+page;
     appLogger.logger.info('url to scrape:', url);
     x(url, 'div.v-card', [{
         business_name:'a.business-name',
         address: 'p.adr',
         phone: 'div.phone.primary',
         website:'a@href'
-        }])(function(err, results){
-            if(err){
-                appLogger.logger.error('Error in scraping page');
-            }else{                
+        }])(function(err, results){              
                 for(var i=0; i< results.length; i++){
                     var add= results[i].address+" ";
                     values.push([results[i].business_name,add,results[i].phone,results[i].website,query.location,query.industry]);
@@ -79,78 +76,79 @@ console.log('inside scrapeYp function');
                     }
                     });
                 },5000);
-            }
         });       
     }
 
 exports.search=function(req,res){
-databaseConnection.query("SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'",function (error, result, fields){
-    if(error) {
-        res.status(500);
-        res.send({
-          "code":500,
-          "status":"Internal Server Error"
-            });
-       
-        }
-        else{
-            console.log('results',result);
-            if(result.length==0){
-                var today = new Date();
-                var searchQueries={
-                    "location":req.query.location,
-                    "industry":req.query.industry,
-                    "search_directory":'Yelp',
-                    "date":today
-                    };
-                databaseConnection.query('INSERT INTO search_history SET ?',searchQueries, function (error, scrapes, fields) {
-                    if(error) {
-                        res.status(500);
-                        res.send({
-                            "code":500,
-                            "status":"Internal Server Error"
-                            });
-                    }else{
-                    console.log('Entry made into search history');
-                    }
-                });
-                var firstQuery={
-                'industry':req.query.industry,
-                'location': req.query.location,
-                'page':1
-                }
-                scrapeYelp(firstQuery);
-                scrapeYp(firstQuery);
-                for (var i = 2; i <= 100; i++) {
-                    (function (i) {
-                        setTimeout(function () {
-                        var query={
-                                    'industry':req.query.industry,
-                                    'location': req.query.location,
-                                    'page':i
-                                }
-                        scrapeYelp(query);
-                        scrapeYp(query);
-                        }, 10000*i);
-                        })(i);
-                };
-                }else{
-                    var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
-                    databaseConnection.query(query,function(error, newresults, fields){
+    console.log("inside search function");
+    var query="SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'";
+    databaseConnection.query(query,function (error, result, fields){
+        console.log("result from query | ", result);
+        if(error) {
+            res.status(500);
+            res.send({
+            "code":500,
+            "status":"Internal Server Error"
+                });    
+            }
+            else{
+                console.log('results',result);
+                if(result.length==0){
+                    var today = new Date();
+                    var searchQueries={
+                        "location":req.query.location,
+                        "industry":req.query.industry,
+                        "date":today
+                        };
+                    databaseConnection.query('INSERT INTO search_history SET ?',searchQueries, function (error, scrapes, fields) {
                         if(error) {
+                            console.log("Error in insert query")
                             res.status(500);
                             res.send({
                                 "code":500,
                                 "status":"Internal Server Error"
                                 });
-                            }else{
-                                res.status(200);
-                                res.send({
-                                "result":newresults
-                                });
-                            }
-                        });
+                        }else{
+                        console.log('Entry made into search history');
+                        }
+                    });
+                    var firstQuery={
+                    'industry':req.query.industry,
+                    'location': req.query.location,
+                    'page':1
                     }
-                }
+                    scrapeYelp(firstQuery);
+                    scrapeYp(firstQuery);
+                    for (var i = 2; i <= 100; i++) {
+                        (function (i) {
+                            setTimeout(function () {
+                            var query={
+                                        'industry':req.query.industry,
+                                        'location': req.query.location,
+                                        'page':i
+                                    }
+                            scrapeYelp(query);
+                            scrapeYp(query);
+                            }, 10000*i);
+                            })(i);
+                    };
+                    }else{
+                        var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
+                        databaseConnection.query(query,function(error, newresults, fields){
+                            if(error) {
+                                res.status(500);
+                                res.send({
+                                    "code":500,
+                                    "status":"Internal Server Error"
+                                    });
+                                }else{
+                                    res.status(200);
+                                    res.send({
+                                    "result":newresults
+                                    });
+                                }
+                            });
+                        }
+                    }
         });
     }

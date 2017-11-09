@@ -2,18 +2,18 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var path = require('path');
-var search = require('./scraperoutes');
+var scraper = require('./scraperoutes');
 var appLogger=require('../custom_utils/appLogger');
 app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
+var databaseConnection = require('./database');
+var crypt = require('../custom_utils/crypt');
 
 router.get('/', function (req, res) {
   // console.log(req.query);
-  var directory= req.query.directory;
   console.log("Get Search");
   var jwtToken= req.headers.authorization;
-  var userName=req.headers.username;
   console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
   var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"'";
   console.log("Query ", query);
