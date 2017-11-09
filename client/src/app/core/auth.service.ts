@@ -19,7 +19,7 @@ export class AuthenticationService {
             localStorage.setItem('currentUser', JSON.stringify(username));
           }
           return user;
-        })
+        });
     }
  
     logout() {

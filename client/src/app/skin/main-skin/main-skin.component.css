@@ -4,3 +4,17 @@ footer{
 footer p {
     font-size: 17px;
 }
+
+.tagline-upper{
+    font-size: 2em;
+    font-weight: 700;
+    line-height: 1;
+    z-index: 999;
+}
+
+.img-fluid{
+    width: 200px;
+    position: fixed;
+    top: 0.6em;
+    left: 0.2em;
+}

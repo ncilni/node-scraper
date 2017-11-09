@@ -78,5 +78,5 @@ export const AppProviders = [
     provide: Http,
     useFactory: httpFactory,
     deps: [XHRBackend, RequestOptions]
-  }],
+  }]
 ]
