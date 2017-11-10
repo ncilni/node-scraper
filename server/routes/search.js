@@ -22,16 +22,16 @@ router.get('/', function (req, res) {
       res.status(500);
       res.send({
         "code":500,
-        "status":"Internal Server Error"
+        "status":"Search : Internal Server Error"
           });
       }else{
-        console.log("New Results : ", dbRecordset);
-        if(dbRecordset.length>0){
-          scraper.search(req, res);
-        }else{
+        if(dbRecordset.length == 0){          
           res.sendStatus(401);
+        }else{
+          appLogger.logger.info("Search : User Authorized -> Proceed to Scarape Routes");
+          scraper.search(req, res);
         }
-
+       
       }
   });
 

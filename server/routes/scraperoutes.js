@@ -80,8 +80,13 @@ console.log('inside scrapeYp function');
     }
 
 exports.search=function(req,res){
-    console.log("inside search function");
+    appLogger.logger.info("Search Scrapper : ", req.method, " | ", req.url, " | ", req.headers);
     var query="SELECT searchId FROM search_history where location= '"+req.query.location+"' and industry='"+req.query.industry+"'";
+    console.log("Search Query :", query);
+
+    res.sendStatus(205);
+    return;
+
     databaseConnection.query(query,function (error, result, fields){
         console.log("result from query | ", result);
         if(error) {

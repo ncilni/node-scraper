@@ -9,6 +9,7 @@ var authentication = require('./routes/authentication');
 var users = require('./routes/users');
 var app = express();
 var router = express.Router();
+var expressValidator = require ('express-validator');
 //nconf used for Global Configurations
 var config = require('nconf');
 var appLogger=require('./custom_utils/appLogger');
@@ -24,7 +25,7 @@ appLogger.logger.info("Intialized : nconf");
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

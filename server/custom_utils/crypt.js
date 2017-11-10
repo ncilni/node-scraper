@@ -19,11 +19,8 @@ exports.decrypt = function (password) {
 exports.encrypt = function (password) {
     console.log("In enCrypt : ", password, "  |  ", algorithm, privateKey);
     var cipher = crypto.createCipher(algorithm, privateKey);
-    console.log("Cipher : ",cipher);
     var crypted = cipher.update(password, 'utf8', 'hex');
-    console.log("Crypted: ",crypted);
     crypted += cipher.final('hex');
-    console.log("Crypted 2: ",crypted);
     return crypted;
 }
 
