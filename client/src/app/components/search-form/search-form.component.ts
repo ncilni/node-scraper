@@ -60,7 +60,6 @@ export class SearchFormComponent implements OnInit {
            //get the place result
            
            let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-           console.log(place);
            //verify result
            if (place.geometry === undefined || place.geometry === null) {
              return;
@@ -78,7 +77,7 @@ export class SearchFormComponent implements OnInit {
      var re = /,/gi; 
      var loc = query.replace(re, ""); 
      console.log(req);
-     this.router.navigate(['/result'],{ queryParams: { location: loc, industry: req.industry,  directory: req.directory, page: 1 } });
+     this.router.navigate(['/app', {outlets: {'home': ['result',loc,req.industry,1]}}]);
    }
   
    validcheck(value){

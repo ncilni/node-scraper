@@ -2,7 +2,7 @@
         <nav class="navbar navbar-expand-lg navbar-light nav-bg-faded">
           <div class="container navcontent">
             <div class="navbar-collapse collapse" id="navbarResponsive" >
-              <ul class="navbar-nav mx-auto" id="pills-tab" role="tablist">
+              <ul *ngIf="isAuthorized" class="navbar-nav mx-auto" id="pills-tab" role="tablist">
                 <li class="nav-item px-lg-4">
                   <a class="nav-link" id="pills-home-tab" (click)="activefun('pills-home')" data-toggle="pill"  role="tab" aria-controls="pills-home" aria-selected="true">Update Users</a>
                 </li>
@@ -17,14 +17,14 @@
               <a class="nav-link text-uppercase" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">List Builder</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">Logout</a>
+              <a class="nav-link text-uppercase" (click)="logout()" routerLinkActive="active">Logout</a>
             </li>
           </ul>
         </nav>
-
+        <div id="snackbar"></div>
 <div class="tab-content container" id="pills-tabContent">
     <app-alert></app-alert>
-  <div class="tab-pane fade" [ngClass]="{show: isActive === 'pills-home'}" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+  <div *ngIf="isAuthorized" class="tab-pane fade" [ngClass]="{show: isActive === 'pills-home'}" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
     <div class="card">
       <div class="card-header">
         Administrator Panel
@@ -49,7 +49,7 @@
                 <div class="form-group row">
                   <label for="inputEmail3" class="col-sm-4 col-form-label">Username</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" [(ngModel)]= 'selectedUser.username' name="selectedUserName" placeholder="username">
+                    <input type="text" class="form-control" [(ngModel)]= 'selectedUser.username' name="selectedUserName" placeholder="username" disabled>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -70,13 +70,13 @@
                     <div class="col-sm-8">
                       <div class="form-check">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="radio" [checked]="selectedUser.type === 1" name="gridRadios" (click)="changeUserType(1)" id="selectedUserType1" value="1" >
+                          <input class="form-check-input" type="radio" [checked]="selectedUser.type === 1" name="selectedRadios" (click)="changeUserType($event)" id="selectedUserType1" value="1" >
                          Admin
                         </label>
                       </div>
                       <div class="form-check">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="radio" [checked]="selectedUser.type === 0" name="gridRadios" (click)="changeUserType(0)" id="selectedUserType2" value="0">
+                          <input class="form-check-input" type="radio" [checked]="selectedUser.type === 0" name="selectedRadios" (click)="changeUserType($event)" id="selectedUserType2" value="0">
                           User
                         </label>
                       </div>
@@ -89,13 +89,13 @@
       </div>
       </div>
     
-      <div class="card-footer text-muted align-right">
+      <div class="card-footer align-right">
         <a  class="btn btn-primary" (click)= "updateRecord()">Update Record</a>
         <a  class="btn btn-danger" (click)= "deleteRecord()">Delete Record</a>
       </div>
     </div>
   </div>
-  <div class="tab-pane fade" id="pills-profile" [ngClass]="{show: isActive === 'pills-profile'}" role="tabpanel" aria-labelledby="pills-profile-tab">
+  <div *ngIf="isAuthorized" class="tab-pane fade" id="pills-profile" [ngClass]="{show: isActive === 'pills-profile'}" role="tabpanel" aria-labelledby="pills-profile-tab">
     <div class="card">
       <div class="card-header">
         Register A New User
@@ -140,13 +140,13 @@
               <div class="col-sm-8">
                 <div class="form-check">
                   <label class="form-check-label">
-                    <input class="form-check-input" type="radio" [checked]="newUser.type === 1" name="gridRadios" (click)="changeUserType(1)" id="selectedUserType1" value="1" >
+                    <input class="form-check-input" type="radio" [checked]="newUser.type == 1" name="newRadios" (click)="changeUserType($event)" id="newUserType1" value="1" >
                    Admin
                   </label>
                 </div>
                 <div class="form-check">
                   <label class="form-check-label">
-                    <input class="form-check-input" type="radio" [checked]="newUser.type === 0" name="gridRadios" (click)="changeUserType(0)" id="selectedUserType2" value="0">
+                    <input class="form-check-input" type="radio" [checked]="newUser.type == 0" name="newRadios" (click)="changeUserType($event)" id="newUserType2" value="0">
                     User
                   </label>
                 </div>
@@ -157,7 +157,7 @@
         </form>
 
       </div>
-      <div class="card-footer text-muted align-right">
+      <div class="card-footer align-right">
         <button class="btn btn-primary" [disabled]="!UserRegistrationForm.valid" (click)="createUser()">Create User</button>
       </div>
     </div>

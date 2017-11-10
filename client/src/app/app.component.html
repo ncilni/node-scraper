@@ -21,7 +21,7 @@
               <a class="nav-link text-uppercase" [routerLink]="['/admin-panel']" routerLinkActive="active">Control Center</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">Logout</a>
+              <a class="nav-link text-uppercase" (click)="logout()" routerLinkActive="active">Logout</a>
             </li>
           </ul>
         </nav>

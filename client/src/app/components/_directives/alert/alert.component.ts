@@ -15,17 +15,18 @@ export class AlertComponent implements OnInit {
      ngOnInit() {
        
          this.alertService.getMessage().subscribe(message => { 
-          console.log(message.text);
           this.message = message; 
+          if(this.message != undefined){
           if(this.message.text.status == 500){
-            this.message.text.statusText += ". Please check network connection.";
+            this.message.text.statusText = " Internal Server Error.Please check network connection.";
           }
           else if(this.message.text.status == 401){
-            this.message.text.statusText += ". Not Authorized for this action.";
+            this.message.text.statusText = " Not Authorized for this action.";
           }
           else if(this.message.text.status == 0){
-            this.message.text.statusText += "ERR_CONNECTION_REFUSED";
+            this.message.text.statusText = " ERR_CONNECTION_REFUSED";
           }
+        }
           });
      }
 
