@@ -7,6 +7,7 @@ var appLogger=require('../custom_utils/appLogger');
 app.use(express.static('/'));
 app.use(express.static('dist'));
 var async = require('async');
+var waterfall= require ('async/waterfall');
 app.use('/*', express.static(path.resolve('dist')));
 var databaseConnection = require('./database');
 var crypt = require('../custom_utils/crypt');
@@ -44,8 +45,12 @@ router.get('/', function (req, res) {
         console.log("New Results : ", dbRecordset);
         if(dbRecordset.length>0){
           async.waterfall([
-            scraper.search(req, res),
-            displayData(req,res)
+            function (err, result) {
+              scraper.search(req, res);
+            },
+            function (err, result) {
+              displayData(req,res)
+            }
         ], function (err, result) {
             if(err){
               res.sendStatus(401);

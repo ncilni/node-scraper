@@ -196,11 +196,11 @@ router.post('/', function (req, res){
 router.put('/', function (req, res) {
   console.log("PUT /USERS");
   console.log("Req Body #####  ", req.body);
-  if ((req.body.password.length == 0) || (req.body.username.length == 0) || (req.body.type.length == 0) || (req.body.firstname.length == 0) || (req.body.lastname.length == 0))
-  {
-    res.sendStatus(400);
-    return;
-  }
+  // if ((req.body.password.length == 0) || (req.body.username.length == 0) || (req.body.type.length == 0) || (req.body.firstname.length == 0) || (req.body.lastname.length == 0))
+  // {
+  //   res.sendStatus(400);
+  //   return;
+  // }
 
   var jwtToken= req.headers.authorization;
   console.log("Role : ",crypt.decodeJWT(jwtToken).role);
@@ -230,26 +230,31 @@ router.put('/', function (req, res) {
     }else{
       console.log("New Results : ", dbRecordset[0].User_Id);
       if(dbRecordset.length>0){
-        appLogger.logger.info("UserID",dbRecordset[0]);
-        var query = "UPDATE list_builder.users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', username='"+req.body.username+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id; 
-        console.log("Update Query :", query);
-        databaseConnection.query(query, function(error, dbRecordset){
-          if(error) {
-          res.status(500);
-          res.send({
-            "code":500,
-            "status":"Internal Server Error"
-          });
-          }else{
-            appLogger.logger.info("Send Status : ", dbRecordset, "End");
-            res.status(200);
+        if(req.body.password===undefined){
+          var query = "UPDATE list_builder.users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id;
+        }else{
+          var query = "UPDATE list_builder.users SET firstname='"+req.body.firstname+"', password='"+req.body.password+"', lastname='"+req.body.lastname+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id;
+        }
+          appLogger.logger.info("UserID",dbRecordset[0]);
+          
+          console.log("Update Query :", query);
+          databaseConnection.query(query, function(error, dbRecordset){
+            if(error) {
+            res.status(500);
             res.send({
-            "code":200,
-            "status":"Successfully updated"
+              "code":500,
+              "status":"Internal Server Error"
             });
-          }
-        });
-      }
+            }else{
+              appLogger.logger.info("Send Status : ", dbRecordset, "End");
+              res.status(200);
+              res.send({
+              "code":200,
+              "status":"Successfully updated"
+              });
+            }
+          });
+        }
     else{
       res.sendStatus(401);
     }
