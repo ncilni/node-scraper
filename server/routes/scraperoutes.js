@@ -5,7 +5,6 @@ var path = require('path');
 var Xray = require('x-ray');
 var request = require('request');
 var x = Xray();
-const makeDriver = require('request-x-ray');
 var cheerio = require('cheerio');
 var databaseConnection = require('./database');
 var appLogger=require('../custom_utils/appLogger');
@@ -242,7 +241,7 @@ exports.search=function(req,res){
                             })(i);
                     };
                     }else{
-                        var query="SELECT * FROM search_results WHERE searchId= '"+result[0].searchId+"'";
+                        var query="SELECT * FROM search_results WHERE location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
                         databaseConnection.query(query,function(error, newresults, fields){
                             if(error) {
                                 res.status(500);
