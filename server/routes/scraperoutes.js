@@ -244,7 +244,8 @@ exports.search=function(req,res){
                             scrapeManta(query);
                             }, 15000*i);
                             })(i);
-                    };
+                    }
+
                     }else{
                         var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
                         databaseConnection.query(query,function(error, newresults, fields){
