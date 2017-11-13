@@ -33,9 +33,6 @@ export class SearchHistoryComponent implements OnInit {
     industry: {
       title: 'Industry'
     },
-    search_directory: {
-      title: 'Directory Searched'
-    },
     date: {
       title: 'Date'
     }

@@ -37,11 +37,7 @@ export class SearchFormComponent implements OnInit {
     {id: 13, name: "HVAC"},
     {id: 14, name: "Landscaping"}
   ];
-  directories = [
-    {id: 1, name: "Yelp", value:'yelp'},
-    {id: 2, name: "Yellow Pages", value:'yp'},
-    {id: 3, name: "Manta", value:'manta'}
-  ];
+
      // end of declarations
 
      constructor(private mapsAPILoader: MapsAPILoader,
