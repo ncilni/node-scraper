@@ -1,12 +1,29 @@
-<ul class="nav nav-pills mb-5 mt-5" id="pills-tab" role="tablist">
-  <li class="nav-item">
-    <a [attr.class]="nav-link" id="pills-home-tab" (click)="activefun(pills-home)" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Update Users</a>
-  </li>
-  <li class="nav-item">
-    <a [attr.class]="nav-link" id="pills-profile-tab" (click)="activefun(pills-profile)" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Register User</a>
-  </li>
-</ul>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light nav-bg-faded">
+          <div class="container navcontent">
+            <div class="navbar-collapse collapse" id="navbarResponsive" >
+              <ul class="navbar-nav mx-auto" id="pills-tab" role="tablist">
+                <li class="nav-item px-lg-4">
+                  <a class="nav-link" id="pills-home-tab" (click)="activefun('pills-home')" data-toggle="pill"  role="tab" aria-controls="pills-home" aria-selected="true">Update Users</a>
+                </li>
+                <li class="nav-item px-lg-4">
+                  <a class="nav-link" id="pills-profile-tab" (click)="activefun('pills-profile')" data-toggle="pill"  role="tab" aria-controls="pills-profile" aria-selected="false">Register User</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <ul class="navbar-nav justify-content-end">
+            <li class="nav-item pr-5">
+              <a class="nav-link text-uppercase" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">List Builder</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-uppercase" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">Logout</a>
+            </li>
+          </ul>
+        </nav>
+
 <div class="tab-content container" id="pills-tabContent">
+    <app-alert></app-alert>
   <div class="tab-pane fade" [ngClass]="{show: isActive === 'pills-home'}" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
     <div class="card">
       <div class="card-header">
@@ -78,7 +95,7 @@
       </div>
     </div>
   </div>
-  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+  <div class="tab-pane fade" id="pills-profile" [ngClass]="{show: isActive === 'pills-profile'}" role="tabpanel" aria-labelledby="pills-profile-tab">
     <div class="card">
       <div class="card-header">
         Register A New User
@@ -96,25 +113,25 @@
           <div class="form-group row">
             <label for="newUserFirstName" class="col-sm-4 col-form-label">First Name</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control"  [(ngModel)]= 'newUser.firstname' name="newUserFirstName" placeholder="First Name">
+              <input type="text" class="form-control"  [(ngModel)]= 'newUser.firstname' name="newUserFirstName" placeholder="First Name" required>
             </div>
           </div>
           <div class="form-group row">
               <label for="selectedLastName" class="col-sm-4 col-form-label">Last Name</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]= 'newUser.lastname' name="newUserLastName" placeholder="Last Name">
+                <input type="text" class="form-control" [(ngModel)]= 'newUser.lastname' name="newUserLastName" placeholder="Last Name" required>
               </div>
             </div>
             <div class="form-group row">
               <label for="selectedLastName" class="col-sm-4 col-form-label">Password</label>
               <div class="col-sm-8">
-                <input type="password" class="form-control" [(ngModel)]= 'newUser.password' name="newUserPassword" placeholder="Password">
+                <input type="password" class="form-control" [(ngModel)]= 'newUser.password' name="newUserPassword" placeholder="Password" required>
               </div>
             </div>
             <div class="form-group row">
               <label for="selectedLastName" class="col-sm-4 col-form-label">Confirm-Password</label>
               <div class="col-sm-8">
-                <input type="password" class="form-control" [(ngModel)]= 'confirmPassword' name="newUserConfirmPassword" placeholder="Confirm Password">
+                <input type="password" class="form-control" [(ngModel)]= 'confirmPassword' name="newUserConfirmPassword" placeholder="Confirm Password" required>
               </div>
             </div>
           <fieldset class="form-group">
@@ -141,7 +158,7 @@
 
       </div>
       <div class="card-footer text-muted align-right">
-        <button class="btn btn-primary" (click)="createUser()">Create User</button>
+        <button class="btn btn-primary" [disabled]="!UserRegistrationForm.valid" (click)="createUser()">Create User</button>
       </div>
     </div>
   </div>

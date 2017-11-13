@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from "../../core/users.service";
 import { FormControl } from '@angular/forms';
 import { User } from "../../modals/admin.modals";
+import { AlertService } from '../../core/alert.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -30,7 +31,7 @@ export class AdminPanelComponent implements OnInit {
 
   public UserSearchForm: FormControl;
   public UserRegistrationForm: FormControl;
-  constructor(private userService:UsersService) { 
+  constructor(private userService:UsersService , private alertService: AlertService) { 
     this.getUserList();
   }
 
@@ -41,11 +42,16 @@ export class AdminPanelComponent implements OnInit {
   }
 
   getUserList(){
-    this.userService.getUser().subscribe(res =>{
-      let response = res.json();
-      this.userList = response.result;
-   });
+    let response = this.userService.getUser().subscribe(
+      (users: any) => {
+        users = users.json();
+     this.userList = users.result;
+      },(err =>{
+        this.alertService.error(err);
+      })
+    );
   }
+
   ngOnInit() {
     this.UserSearchForm = new FormControl();
   }
@@ -55,7 +61,7 @@ export class AdminPanelComponent implements OnInit {
   }
   
   createUser(){
-
+    this.userService.createUser(this.newUser).subscribe(() => this.getUserList());
   }
 
   deleteRecord(){

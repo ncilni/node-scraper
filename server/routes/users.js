@@ -10,13 +10,12 @@ app.use(express.static('/'));
 app.use(express.static('dist'));
 app.use('/*', express.static(path.resolve('dist')));
 
-router.get('/', function (req, res) {
-  console.log("Incoming request: ",req.headers.username, "token :", req.headers.authorization);  
+router.get('/', function (req, res) {  
   console.log("Get Users");
   var jwtToken= req.headers.authorization;
   console.log("Get Users");
-  console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
-  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
+  console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username, crypt.decodeJWT(jwtToken).role);
+  var query = "select User_Id from list_builder.users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {
@@ -84,10 +83,14 @@ router.get('/', function (req, res) {
 });
 
 router.delete('/', function (req, res) {
+  if (req.body.password.length == 0 || req.body.username.length == 0){
+    res.sendStatus(400);
+    return;
+  }
   console.log("Delete Users");
   var jwtToken= req.headers.authorization;
   console.log("Delete Users");
-  console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
+  console.log("Query ", req.headers.authorization, " | ",crypt.decodeJWT(jwtToken).username);
   var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
@@ -128,9 +131,15 @@ router.delete('/', function (req, res) {
 
 //Register User
 router.post('/', function (req, res){
+  if (req.body.password.length == 0 || req.body.username.length == 0){
+    res.sendStatus(400);
+    return;
+  }
   req.body.password = crypt.encrypt(req.body.password);
-  appLogger.logger.info('Username | Encrypted Password | Role', req.body.username, " | ", req.body.password, " | ", req.body.type);
-
+  appLogger.logger.info('Username | Encrypted Password | Role', req.body.username, " | ", "*" , " | ", req.body.type);
+  if (req.body.password.length == 0 || req.body.username.length == 0){
+    res.sendStatus(400);
+  }
     var values=[];
     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
     appLogger.logger.info('values',values);
@@ -172,57 +181,15 @@ router.post('/', function (req, res){
     });
 });
   
-
-// router.put('/', function (req, res) {
-//     var values=[];
-//     values.push([req.body.firstname,req.body.lastname,req.body.username,req.body.password,req.body.type]);
-//     appLogger.logger.info('values',values);
-//     databaseConnection.query("SELECT * FROM users where username= '"+req.body.username+"'",function(error, results, fields){
-//       if(!error) {
-//           appLogger.logger.info('results',results);
-//             if(results.length==0){
-//               databaseConnection.query('INSERT INTO users (firstname, lastname, username, password, type) VALUES ?', [values],function(error, newresults){
-//                 if(error) {
-//                 res.status(500);
-//                 res.send({
-//                     "code":500,
-//                     "status":"Internal Server Error"
-//                     });
-//                 }else{
-//                     appLogger.logger.info("Send Status : ", newresults, "End");
-//                     res.status(201);
-//                     res.send({
-//                     "code":201,
-//                     "status":"User Created"
-//                     });
-//                 }
-//             });
-//             } else{
-//               res.status(400);
-//               res.send({
-//                 "code":400,
-//                 "status":"User already exists"
-//                     });
-//             }
-//         }
-//         else{
-//           res.status(500);
-//           res.send({
-//             "code":500,
-//             "status":"Internal Server Error"
-//           });
-//         }
-//     });
-// });
-
 router.put('/', function (req, res) {
 
 
-  console.log("Put Users ");
+  console.log("Get History");
   var jwtToken= req.headers.authorization;
   if(crypt.decodeJWT(jwtToken).role == 0){
     res.sendStatus(401);
   }
+
   console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
   var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"'";
   console.log("Query ", query);

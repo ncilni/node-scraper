@@ -16,7 +16,7 @@ router.get('/', function (req, res) {
   console.log("Get History");
   var jwtToken= req.headers.authorization;
   console.log("Get History");
-  console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
+  console.log("Query + Username ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username);
   var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"'";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){

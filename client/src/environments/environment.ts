@@ -4,12 +4,6 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  origin:'http://localhost:8020/api'
 };
-export const production = {
-  API_URL : 'http://lx2.intelegencia.com:8020/api'
-}
-
-export const development = {
-  API_URL : 'http://localhost:8020/api'
-}

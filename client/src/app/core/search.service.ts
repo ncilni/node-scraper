@@ -13,19 +13,19 @@ export class SearchService {
 
 
   getLocation(industry){
-    return this.http.get('http://scrapper.intelegencia.com/api/history/location/?industry='+industry);
+    return this.http.get('/history/location/?industry='+industry);
   }
 
   Search(query){
-   return this.http.get('http://scrapper.intelegencia.com/api/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory+'&page='+query.page);
+   return this.http.get('/search/?location='+query.location+'&industry='+query.industry+'&directory='+query.directory+'&page='+query.page);
     
   }
   getHistory(){
-    return this.http.get('http://localhost:8020/api/history/');
+    return this.http.get('/history/');
   }
 
   getHistoryResults(query){
-    return this.http.get('http://scrapper.intelegencia.com/api/history/results/?location='+query.location+'&industry='+query.industry);
+    return this.http.get('/history/results/?location='+query.location+'&industry='+query.industry);
   }
   // downloadFile(query){
   //   return this.http.get('/api/history/download/?location='+query.location+'&industry='+query.industry+'&format='+query.format);
