@@ -45,25 +45,9 @@ router.get('/', function (req, res) {
         )
         }else{
           res.sendStatus(401);
-        }else{
-          appLogger.logger.info("Search : User Authorized -> Proceed to Scarape Routes");
-          scraper.search(req, res);
-        }
-       
+        }       
       }
   });
-
-  // switch(directory){
-  //   case "yelp":
-  //     search.searchYelp(req, res);
-  //     break;
-  //   case "yp":
-  //     search.searchyp(req, res);
-  //     break;
-  //   case "manta":
-  //     search.searchmanta(req, res);
-  //     break;
-  // }
 });
 
 module.exports = router;
