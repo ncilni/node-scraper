@@ -33,10 +33,6 @@ router.get('/', function (req, res) {
               databaseConnection.query(query,function(error, dbRecordset, fields){
                 if(error) {
                   res.status(500);
-                  res.send({
-                    "code":500,
-                    "status":"Internal Server Error"
-                      });
                   }else{
                     appLogger.logger.info(dbRecordset);
                     res.status(200);
