@@ -25,7 +25,25 @@ router.get('/', function (req, res) {
         "status":"Search : Internal Server Error"
           });
       }else{
-        if(dbRecordset.length == 0){          
+        console.log("New Results : ", dbRecordset);
+        if(dbRecordset.length>0){
+          scraper.search(req, res).then(
+            function(req, res) {
+              var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
+              databaseConnection.query(query,function(error, dbRecordset, fields){
+                if(error) {
+                  res.status(500);
+                  }else{
+                    appLogger.logger.info(dbRecordset);
+                    res.status(200);
+                    res.send({
+                      "result":dbRecordset
+                      });
+                  }
+                });
+            }
+        )
+        }else{
           res.sendStatus(401);
         }else{
           appLogger.logger.info("Search : User Authorized -> Proceed to Scarape Routes");
