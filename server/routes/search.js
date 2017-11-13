@@ -6,9 +6,26 @@ var scraper = require('./scraperoutes');
 var appLogger=require('../custom_utils/appLogger');
 app.use(express.static('/'));
 app.use(express.static('dist'));
+var async = require('async');
+var waterfall= require ('async/waterfall');
 app.use('/*', express.static(path.resolve('dist')));
 var databaseConnection = require('./database');
 var crypt = require('../custom_utils/crypt');
+
+displayData = function(req,res){
+  var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
+  databaseConnection.query(query,function(error, dbRecordset, fields){
+    if(error) {
+      res.status(500);
+      }else{
+        appLogger.logger.info(dbRecordset);
+        res.status(200);
+        res.send({
+          "result":dbRecordset
+          });
+      }
+    });
+}
 
 router.get('/', function (req, res) {
   // console.log(req.query);
@@ -27,22 +44,20 @@ router.get('/', function (req, res) {
       }else{
         console.log("New Results : ", dbRecordset);
         if(dbRecordset.length>0){
-          scraper.search(req, res).then(
-            function(req, res) {
-              var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
-              databaseConnection.query(query,function(error, dbRecordset, fields){
-                if(error) {
-                  res.status(500);
-                  }else{
-                    appLogger.logger.info(dbRecordset);
-                    res.status(200);
-                    res.send({
-                      "result":dbRecordset
-                      });
-                  }
-                });
+          async.waterfall([
+            function (err, result) {
+              scraper.search(req, res);
+            },
+            function (err, result) {
+              displayData(req,res)
             }
-        )
+        ], function (err, result) {
+            if(err){
+              res.sendStatus(401);
+            }else{
+              appLogger.logger.info('Successful scraping for location: ',req.query.location," & industry= ",req.query.industry);
+            }
+          });
         }else{
           res.sendStatus(401);
         }       
