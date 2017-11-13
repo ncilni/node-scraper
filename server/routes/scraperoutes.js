@@ -241,7 +241,7 @@ exports.search=function(req,res){
                             })(i);
                     };
                     }else{
-                        var query="SELECT * FROM search_results WHERE location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
+                        var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
                         databaseConnection.query(query,function(error, newresults, fields){
                             if(error) {
                                 res.status(500);

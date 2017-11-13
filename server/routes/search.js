@@ -27,7 +27,26 @@ router.get('/', function (req, res) {
       }else{
         console.log("New Results : ", dbRecordset);
         if(dbRecordset.length>0){
-          scraper.search(req, res);
+          scraper.search(req, res).then(
+            function(req, res) {
+              var query="SELECT * FROM search_results WHERE search_location= '"+req.query.location+" AND industry='"+req.query.industry+"'";
+              databaseConnection.query(query,function(error, dbRecordset, fields){
+                if(error) {
+                  res.status(500);
+                  res.send({
+                    "code":500,
+                    "status":"Internal Server Error"
+                      });
+                  }else{
+                    appLogger.logger.info(dbRecordset);
+                    res.status(200);
+                    res.send({
+                      "result":dbRecordset
+                      });
+                  }
+                });
+            }
+        )
         }else{
           res.sendStatus(401);
         }
