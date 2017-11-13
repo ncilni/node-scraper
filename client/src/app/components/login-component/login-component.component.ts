@@ -38,16 +38,17 @@ export class LoginComponentComponent implements OnInit {
       this.authenticationService.login(this.model.username, this.model.password)
           .subscribe(
               data => {
-                  if(!this.returnUrl || !this.returnUrl==undefined){
-                  this.router.navigate([this.returnUrl]);
+                this.loading =false;
+                if(!this.returnUrl || !this.returnUrl==undefined){
+                    this.router.navigate([this.returnUrl]);
                 }
                 else{
-                    this.router.navigate(['/app']);
+                    this.router.navigate(['/app', {outlets: {'home': ['search']}}]);
                 }
               },
               error => {
-                  this.alertService.error(error);
-                  this.loading = false;
-              });
+                this.alertService.error(error);
+                this.loading = false;
+             });
   }
 }

@@ -17,7 +17,7 @@ const appRoutes: Routes = [
   { path: 'admin-panel' , component: AdminPanelComponent},
   { path: 'app', component:AppComponent , canActivate:[AuthGuard], children:[
     { path: 'history', component: SearchHistoryComponent, canActivate:[AuthGuard] , outlet:'home' },
-    { path: 'result'  , component: SearchResultComponent, canActivate:[AuthGuard] ,outlet:'home'},
+    { path: 'result/:loc/:industry/:page'  , component: SearchResultComponent, canActivate:[AuthGuard] ,outlet:'home'},
     
     {
       path: 'search',

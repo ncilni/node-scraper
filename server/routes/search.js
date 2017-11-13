@@ -22,7 +22,7 @@ router.get('/', function (req, res) {
       res.status(500);
       res.send({
         "code":500,
-        "status":"Internal Server Error"
+        "status":"Search : Internal Server Error"
           });
       }else{
         console.log("New Results : ", dbRecordset);
@@ -45,8 +45,11 @@ router.get('/', function (req, res) {
         )
         }else{
           res.sendStatus(401);
+        }else{
+          appLogger.logger.info("Search : User Authorized -> Proceed to Scarape Routes");
+          scraper.search(req, res);
         }
-
+       
       }
   });
 

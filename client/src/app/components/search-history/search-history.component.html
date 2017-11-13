@@ -1,11 +1,10 @@
-<div class="bg-faded p-4 my-4">
-    <hr class="divider">
+<div class="bg-faded p-4">
     <h2 class="text-center text-lg text-uppercase my-0">Search
       <strong>Results</strong>
     </h2>
     <hr class="divider">
 <div class="container-fluid" *ngIf="data">
-  <ng2-smart-table *ngIf="data" [settings]="settings" [source]="data"></ng2-smart-table>
+  <ng2-smart-table class="ng2-smart-table" *ngIf="data" [settings]="settings" [source]="data"></ng2-smart-table>
 
 </div>
 

@@ -6,6 +6,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
 import { SearchService } from '../../core/search.service';
+import { AlertService } from '../../core/alert.service';
 
 @Component({
   selector: 'app-search-result',
@@ -47,7 +48,11 @@ export class SearchResultComponent implements OnInit {
 
 
 
-     constructor(public ss:SearchService, public route:ActivatedRoute, public router:Router) { 
+     constructor(
+       public searchService:SearchService, 
+       public route:ActivatedRoute, 
+       public router:Router,
+       public alertservice:AlertService) { 
         
       }
       goNextPage(){
@@ -70,21 +75,20 @@ export class SearchResultComponent implements OnInit {
      
 
       ngOnInit() {
-      
-        this.Industry = this.route.snapshot.queryParams["industry"];
-        let Loc = this.route.snapshot.queryParams["location"];
-        let npage = this.route.snapshot.queryParams["page"];
+        this.Industry = this.route.snapshot.params.industry;
+        let Loc = this.route.snapshot.params.loc
+        let npage = this.route.snapshot.params.page
         var re = / United States/gi; 
         this.Location = Loc.replace(re, ""); 
-        this.Directory = this.route.snapshot.queryParams["directory"];
-        console.log(this.Industry, this.Location, this.Directory);
-        this.query={industry:this.Industry, location: this.Location, directory: this.Directory, page:npage};
-        this.ss.Search(this.query).subscribe(res=>
+        this.query={industry:this.Industry, location: this.Location, page:npage};
+        this.searchService.Search(this.query).subscribe(res=>
           {this.resp=res.json()
             this.data=this.resp.result;
           console.log('Data:',this.resp);
           }
-        )
+        ),err =>{
+          this.alertservice.error(err);
+        }
       
     }
   }
