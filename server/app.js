@@ -28,9 +28,21 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// app.all('*', function(req, res, next) {
+//   // add details of what is allowed in HTTP request headers to the response headers
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+//   res.header("Access-Control-Allow-Credentials", false);
+//   res.header('Access-Control-Max-Age', "86400");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,authorization");
+//   res.header("Access-Control-Expose-Headers", "authorization");
+//   // the next() function continues execution and will move onto the requested URL/URI
+//   next();
+// });
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST');
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,authorization");
   // since the angular http does not show all the custom headers so adding the below code
   res.header("Access-Control-Expose-Headers", "authorization");
@@ -38,6 +50,11 @@ app.use(function(req, res, next) {
   next();
 });
 //app.use('/api', index);
+
+app.options('*', function(req, res) {
+  res.sendSta(200);
+});
+
 app.use('/api/authenticate', authentication);
 app.use('/api/search', search);
 app.use('/api/history', history);

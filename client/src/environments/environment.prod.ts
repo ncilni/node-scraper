@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  origin:'http://localhost:8020/api'
+  origin:'http://scrapper.intelegencia.com:8020/api'
 };
