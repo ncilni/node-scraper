@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
   var jwtToken= req.headers.authorization;
   console.log("Get Users");
   console.log("Query ", req.headers.authorization, " | ", crypt.decodeJWT(jwtToken).username, crypt.decodeJWT(jwtToken).role);
-  var query = "select User_Id from list_builder.users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
+  var query = "select User_Id from users WHERE JwtToken='"+jwtToken+"' and username='"+crypt.decodeJWT(jwtToken).username+"' and type=1";
   console.log("Query ", query);
   databaseConnection.query(query,function(error, dbRecordset, fields){
     if(error) {
@@ -231,9 +231,9 @@ router.put('/', function (req, res) {
       console.log("New Results : ", dbRecordset[0].User_Id);
       if(dbRecordset.length>0){
         if(req.body.password===undefined){
-          var query = "UPDATE list_builder.users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id;
+          var query = "UPDATE users SET firstname='"+req.body.firstname+"', lastname='"+req.body.lastname+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id;
         }else{
-          var query = "UPDATE list_builder.users SET firstname='"+req.body.firstname+"', password='"+req.body.password+"', lastname='"+req.body.lastname+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id;
+          var query = "UPDATE users SET firstname='"+req.body.firstname+"', password='"+req.body.password+"', lastname='"+req.body.lastname+"', type="+req.body.type+" Where user_Id="+dbRecordset[0].User_Id;
         }
           appLogger.logger.info("UserID",dbRecordset[0]);
           
