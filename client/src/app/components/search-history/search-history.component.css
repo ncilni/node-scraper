@@ -1,0 +1,11 @@
+:host>>> table tr{
+    font-size: 14px !important;
+}
+
+:host>>> table tr th ng2-smart-table-filter div{
+    width:120px;
+    font-size:12px !important;
+}
+:host >>> table tr th ng2-smart-table-filter div input-filter input{
+    font-size:12px !important;
+}

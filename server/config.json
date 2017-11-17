@@ -1,0 +1,16 @@
+{
+    "http": {
+      "_appPort": 8020
+    },
+    "databaseSettings": {
+        "host" : "mysql.intelegencia.com",
+        "port" : "3306",
+        "user" : "user_listbuilder",
+        "password" : "intel@01",
+        "database" : "list_builder"        
+    },
+    "JWTConfigs":{
+        "secretKey" : "E4kINDIA_Doremon",
+        "cryptAlgorithm" : "aes-256-ctr"
+    }
+}

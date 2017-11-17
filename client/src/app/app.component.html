@@ -1,0 +1,36 @@
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light nav-bg-faded">
+          <div class="container">
+            <div class="navbar-collapse collapse" id="navbarResponsive" style="">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item px-lg-4">
+                    <a class="nav-link text-uppercase text-expanded" [routerLink]="['/app', {outlets: {'home': ['search']}}]" routerLinkActive="active">Search</a>
+                </li>
+                <li class="nav-item px-lg-4">
+                <a class="nav-link text-uppercase text-expanded" [routerLink]="['/app' , {outlets: {'home': ['history']}}]" routerLinkActive="active">Search History</a>
+                </li>
+                <li class="nav-item px-lg-4">
+                  <a class="nav-link text-uppercase text-expanded" [routerLink]="['/app', {outlets: {'home': ['export']}}]" routerLinkActive="active"><b>Export Data</b></a>
+                </li>
+              </ul>
+             
+            </div>
+          </div>
+          <ul class="navbar-nav justify-content-end">
+            <li class="nav-item pr-5">
+              <a class="nav-link text-uppercase" [routerLink]="['/admin-panel']" routerLinkActive="active">Control Center</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-uppercase" (click)="logout()" routerLinkActive="active">Logout</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="container-fluid">
+            <router-outlet name="home"></router-outlet>
+          
+        </div>
+     
+      
+    
+    
+    

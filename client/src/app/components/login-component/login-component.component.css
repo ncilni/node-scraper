@@ -1,0 +1,28 @@
+.container{
+	text-align:center;
+	max-width:50rem;
+	font-size:18px;
+	margin-top:10rem;
+}
+
+.card-header{
+	text-align: left;
+}
+
+
+.card-body{
+	text-align: left;
+}
+.text-right{
+	text-align: right !important;
+}
+
+.card-footer{
+	display:flex;
+	justify-content: space-between;
+}
+
+.alert {
+	 padding: 7px; 
+	 margin-bottom: 7px; 
+}

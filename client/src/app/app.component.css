@@ -1,0 +1,35 @@
+/* Starter styles */
+.container{
+    max-width: 45em;
+}
+.test-image {
+    content: url('../assets/images/test-image.png');
+    max-width: 100px;
+}
+.info-block {
+    display: inline-block;
+}
+.left {
+    float: left;
+}
+.nav-link{
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+.right {
+    float: right;
+}
+.default-info{
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
+
+.nav-bg-faded {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-collapse{
+    padding-left: 7em !important;
+    padding-right:0px;
+}
