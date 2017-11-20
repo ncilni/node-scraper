@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
 //app.use('/api', index);
 
 app.options('*', function(req, res) {
-  res.sendSta(200);
+  res.sendStatus(200);
 });
 
 app.use('/api/authenticate', authentication);
